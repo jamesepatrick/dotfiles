@@ -1,0 +1,8 @@
+tridactyl/workrc filter=git-crypt diff=git-crypt
+ssh/config.d/work.config filter=git-crypt diff=git-crypt
+
+#zsh
+zsh/environment/host/dev2F/* filter=git-crypt diff=git-crypt
+zsh/environment/host/devF/*  filter=git-crypt diff=git-crypt
+zsh/environment/host/wok/*   filter=git-crypt diff=git-crypt
+zsh/environment/host/wye/*   filter=git-crypt diff=git-crypt

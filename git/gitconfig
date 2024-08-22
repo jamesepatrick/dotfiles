@@ -1,0 +1,41 @@
+[user]
+	name = James Patrick
+  signingkey = ~/.ssh/github.com.pub
+
+[gpg]
+  format = ssh
+
+
+[commit]
+  gpgsign = true
+
+[core]
+  editor = vim
+	excludesfile = ~/.gitignore_global
+
+[github]
+	user = jamesepatrick
+
+[alias]
+	root = rev-parse --show-toplevel
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[init]
+	defaultBranch = develop
+
+[gpg]
+  format = ssh
+
+[commit]
+  gpgsign = true
+
+[push]
+	autoSetupRemote = true
+
+[include]
+    path = ~/.gitconfig.local

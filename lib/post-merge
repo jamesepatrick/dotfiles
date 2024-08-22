@@ -1,0 +1,3 @@
+#!/bin/zsh
+# -*- zsh -*-
+( ($+commands[gmake])) && gmake up || make update

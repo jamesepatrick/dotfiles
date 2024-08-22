@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Github Element
+# uuid: gh
+# key: gh
+# --
+-  ${1:repo}

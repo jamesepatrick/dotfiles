@@ -1,0 +1,24 @@
+################################################################################
+# MISC
+# Ignore the Mac artifacts.
+.DS_Store
+# Ignore the temp files created by emacs.
+*.#*
+# Keep todo local.
+*todo.org
+
+################################################################################
+# Configs
+i3/config
+vim/backup/*
+vim/autoload/*
+vim/spell/*.spl
+vim/plugged
+vim/.netrwhist
+
+# Ignore anything that is transient
+*/transient/*
+*/cache/*
+
+# Brewfile lock
+*/Brewfile.lock.json

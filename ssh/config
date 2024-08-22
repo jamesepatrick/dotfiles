@@ -1,0 +1,13 @@
+ServerAliveInterval 300
+ServerAliveCountMax 3
+
+host github.com
+  IdentityFile ~/.ssh/github.com.pub
+  IdentitiesOnly yes
+Host git.jpatrick.io
+  Port 222
+  IdentityFile ~/.ssh/git.jpatrick.io
+Host *
+  UseRoaming no
+
+Include config.d/*

@@ -1,0 +1,33 @@
+#! env zsh
+# -*- sh -*-
+
+REPORT="`dirname $0`/report"
+
+if [ -z "$1" ] || [ -z "$2" ] ; then
+  "$REPORT" error "ERROR: Both to and from string must be defined.\n     source: $1 \n     symlnk: $2"
+  exit -1
+fi
+
+if [[ -h $2 ]] ; then
+ link_location=$(readlink $2)
+  if [[ "$1" == "$link_location" ]] ; then
+    "$REPORT" pass "Symlink already installed $1"
+    exit 0
+  else
+    "$REPORT" warn "Symlink already exist, buut doesn't point to the src"
+    exit 1
+  fi
+fi
+
+if [[ -e $2 ]] ; then
+  "$REPORT" warn "Something already exists at $2."
+  exit 1
+fi
+
+parent=$(dirname "$2")
+if [[ ! -e $parent ]] ; then
+  "$REPORT" warn "$parent doesn't exist. Creating."
+  mkdir -p $parent
+fi
+
+"$REPORT" pass "Symlinked `ln -svf $1 $2`"

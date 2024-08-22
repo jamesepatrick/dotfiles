@@ -1,0 +1,440 @@
+pre {
+  border-radius: 3px;
+  padding: 8pt;
+  overflow: auto;
+  margin: 1.2em;
+
+  &.src {
+    position: relative;
+    overflow: auto;
+
+    &:before {
+      display: none;
+      position: absolute;
+      top: -8px;
+      right: 12px;
+      padding: 3px;
+      color: #555;
+      background-color: #f2f2f299;
+    }
+
+    &:hover:before {
+      display: inline;
+      margin-top: 14px;
+    }
+  }
+}
+
+/*
+ ==============================================================================
+ Code Highlighting
+ ==============================================================================
+*/
+pre {
+  background-color: var(--code-bg);
+  & span {
+    &.org-highlight-quoted-symbol {
+      color: var(--code-08);
+    }
+    &.org-warning {
+      color: var(--code-08);
+      font-weight: bold;
+    }
+    &.org-error {
+      color: var(--code-09);
+      font-weight: bold;
+    }
+    &.org-bold {
+      font-weight: bold;
+    }
+    &.org-success {
+      color: var(--code-03);
+      font-weight: bold;
+    }
+    &.org-highlight-quoted-quote {
+      color: var(--code-01);
+    }
+    &.org-builtin {
+      color: var(--code-02);
+    }
+    &.org-string {
+      color: var(--code-03);
+    }
+    &.org-doc {
+      color: var(--code-10);
+    }
+    &.org-keyword {
+      color: var(--code-01);
+    }
+    &.org-variable-name {
+      color: var(--code-05);
+    }
+    &.org-function-name {
+      color: var(--code-02);
+    }
+    &.org-type {
+      color: var(--code-08);
+    }
+    &.org-preprocessor {
+      color: var(--code-01);
+      font-weight: bold;
+    }
+    &.org-constant {
+      color: var(--code-04);
+    }
+    &.org-comment-delimiter {
+      color: var(--code-07);
+    }
+    &.org-comment {
+      color: var(--code-07);
+    }
+    &.org-outshine-level-1 {
+      color: #8d8d84;
+      font-style: italic;
+    }
+    &.org-outshine-level-2 {
+      color: #8d8d84;
+      font-style: italic;
+    }
+    &.org-outshine-level-3 {
+      color: #8d8d84;
+      font-style: italic;
+    }
+    &.org-outshine-level-4 {
+      color: #8d8d84;
+      font-style: italic;
+    }
+    &.org-outshine-level-5 {
+      color: #8d8d84;
+      font-style: italic;
+    }
+    &.org-outshine-level-6 {
+      color: #8d8d84;
+      font-style: italic;
+    }
+    &.org-outshine-level-7 {
+      color: #8d8d84;
+      font-style: italic;
+    }
+    &.org-outshine-level-8 {
+      color: #8d8d84;
+      font-style: italic;
+    }
+    &.org-outshine-level-9 {
+      color: #8d8d84;
+      font-style: italic;
+    }
+    &.org-rainbow-delimiters-depth-1 {
+      color: var(--code-01);
+    }
+    &.org-rainbow-delimiters-depth-2 {
+      color: var(--code-02);
+    }
+    &.org-rainbow-delimiters-depth-3 {
+      color: var(--code-03);
+    }
+    &.org-rainbow-delimiters-depth-4 {
+      color: var(--code-04);
+    }
+    &.org-rainbow-delimiters-depth-5 {
+      color: var(--code-01);
+    }
+    &.org-rainbow-delimiters-depth-6 {
+      color: var(--code-02);
+    }
+    &.org-rainbow-delimiters-depth-7 {
+      color: var(--code-03);
+    }
+    &.org-rainbow-delimiters-depth-8 {
+      color: var(--code-04);
+    }
+    &.org-rainbow-delimiters-depth-9 {
+      color: var(--code-09);
+    }
+    &.org-sh-quoted-exec {
+      color: var(--code-01);
+    }
+    &.org-diff-added {
+      color: var(--code-03);
+    }
+    &.org-diff-changed {
+      color: var(--code-08);
+    }
+    &.org-diff-header {
+      color: var(--code-12);
+    }
+    &.org-diff-hunk-header {
+      color: var(--code-04);
+    }
+    &.org-diff-none {
+      color: var(--code-11);
+    }
+    &.org-diff-removed {
+      color: var(--code-09);
+    }
+  }
+}
+/*
+ ==============================================================================
+ Stay what the code mode is.
+ ==============================================================================
+*/
+pre {
+  /* Languages per Org manual */
+  &.src-asymptote:before {
+    content: "Asymptote";
+  }
+  &.src-awk:before {
+    content: "Awk";
+  }
+  &.src-authinfo::before {
+    content: "Authinfo";
+  }
+  &.src-C:before {
+    content: "C";
+  }
+  /* pre.src-C++ doesn't work in CSS */
+  &.src-clojure:before {
+    content: "Clojure";
+  }
+  &.src-css:before {
+    content: "CSS";
+  }
+  &.src-D:before {
+    content: "D";
+  }
+  &.src-ditaa:before {
+    content: "ditaa";
+  }
+  &.src-dot:before {
+    content: "Graphviz";
+  }
+  &.src-calc:before {
+    content: "Emacs Calc";
+  }
+  &.src-emacs-lisp:before {
+    content: "Emacs Lisp";
+  }
+  &.src-fortran:before {
+    content: "Fortran";
+  }
+  &.src-gnuplot:before {
+    content: "gnuplot";
+  }
+  &.src-haskell:before {
+    content: "Haskell";
+  }
+  &.src-hledger:before {
+    content: "hledger";
+  }
+  &.src-java:before {
+    content: "Java";
+  }
+  &.src-js:before {
+    content: "Javascript";
+  }
+  &.src-latex:before {
+    content: "LaTeX";
+  }
+  &.src-ledger:before {
+    content: "Ledger";
+  }
+  &.src-lisp:before {
+    content: "Lisp";
+  }
+  &.src-lilypond:before {
+    content: "Lilypond";
+  }
+  &.src-lua:before {
+    content: "Lua";
+  }
+  &.src-matlab:before {
+    content: "MATLAB";
+  }
+  &.src-mscgen:before {
+    content: "Mscgen";
+  }
+  &.src-ocaml:before {
+    content: "Objective Caml";
+  }
+  &.src-octave:before {
+    content: "Octave";
+  }
+  &.src-org:before {
+    content: "Org mode";
+  }
+  &.src-oz:before {
+    content: "OZ";
+  }
+  &.src-plantuml:before {
+    content: "Plantuml";
+  }
+  &.src-processing:before {
+    content: "Processing.js";
+  }
+  &.src-python:before {
+    content: "Python";
+  }
+  &.src-R:before {
+    content: "R";
+  }
+  &.src-ruby:before {
+    content: "Ruby";
+  }
+  &.src-sass:before {
+    content: "Sass";
+  }
+  &.src-scheme:before {
+    content: "Scheme";
+  }
+  &.src-screen:before {
+    content: "Gnu Screen";
+  }
+  &.src-sed:before {
+    content: "Sed";
+  }
+  &.src-sh:before {
+    content: "shell";
+  }
+  &.src-sql:before {
+    content: "SQL";
+  }
+  &.src-sqlite:before {
+    content: "SQLite";
+  }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  &.src-forth:before {
+    content: "Forth";
+  }
+  &.src-io:before {
+    content: "IO";
+  }
+  &.src-J:before {
+    content: "J";
+  }
+  &.src-makefile:before {
+    content: "Makefile";
+  }
+  &.src-maxima:before {
+    content: "Maxima";
+  }
+  &.src-perl:before {
+    content: "Perl";
+  }
+  &.src-picolisp:before {
+    content: "Pico Lisp";
+  }
+  &.src-scala:before {
+    content: "Scala";
+  }
+  &.src-shell:before {
+    content: "Shell Script";
+  }
+  &.src-ebnf2ps:before {
+    content: "ebfn2ps";
+  }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  &.src-cpp:before {
+    content: "C++";
+  }
+  &.src-abc:before {
+    content: "ABC";
+  }
+  &.src-coq:before {
+    content: "Coq";
+  }
+  &.src-groovy:before {
+    content: "Groovy";
+  }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  &.src-bash:before {
+    content: "bash";
+  }
+  &.src-csh:before {
+    content: "csh";
+  }
+  &.src-ash:before {
+    content: "ash";
+  }
+  &.src-dash:before {
+    content: "dash";
+  }
+  &.src-ksh:before {
+    content: "ksh";
+  }
+  &.src-mksh:before {
+    content: "mksh";
+  }
+  &.src-posh:before {
+    content: "posh";
+  }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  &.src-ada:before {
+    content: "Ada";
+  }
+  &.src-asm:before {
+    content: "Assembler";
+  }
+  &.src-caml:before {
+    content: "Caml";
+  }
+  &.src-delphi:before {
+    content: "Delphi";
+  }
+  &.src-html:before {
+    content: "HTML";
+  }
+  &.src-idl:before {
+    content: "IDL";
+  }
+  &.src-mercury:before {
+    content: "Mercury";
+  }
+  &.src-metapost:before {
+    content: "MetaPost";
+  }
+  &.src-modula-2:before {
+    content: "Modula-2";
+  }
+  &.src-pascal:before {
+    content: "Pascal";
+  }
+  &.src-ps:before {
+    content: "PostScript";
+  }
+  &.src-prolog:before {
+    content: "Prolog";
+  }
+  &.src-simula:before {
+    content: "Simula";
+  }
+  &.src-tcl:before {
+    content: "tcl";
+  }
+  &.src-tex:before {
+    content: "TeX";
+  }
+  &.src-plain-tex:before {
+    content: "Plain TeX";
+  }
+  &.src-verilog:before {
+    content: "Verilog";
+  }
+  &.src-vhdl:before {
+    content: "VHDL";
+  }
+  &.src-xml:before {
+    content: "XML";
+  }
+  &.src-nxml:before {
+    content: "XML";
+  }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  &.src-conf:before {
+    content: "Configuration File";
+  }
+}

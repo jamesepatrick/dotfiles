@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+export CONFIG=${XDG_CONFIG_HOME:-~/.config}/tellme/creds
+
+# Load config file if it exist.
+[ -f $CONFIG ] && export $(grep -v '^#' $CONFIG | xargs)
+
+usage(){
+  echo "You have to tell me something"
+  exit -1
+}
+
+setup(){
+  echo "It doesn't look like I've been setup yet. I will need the Application & User tokens."
+  read -r -p "  Application Token: " APPLICATION_TOKEN
+  read -r -p "  User Token: " USER_TOKEN
+  mkdir -p $(dirname $CONFIG)
+  cat <<-EOF > $CONFIG
+	application_token=$APPLICATION_TOKEN
+	user_token=$USER_TOKEN
+	EOF
+  chmod 600 $CONFIG
+  echo "Config setup at $CONFIG"
+  echo
+}
+
+if [[ -z $application_token || -z $user_token ]] ; then
+  setup
+  export $(grep -v '^#' $CONFIG | xargs)
+fi
+
+if [[ $# -eq 0 ]] ; then
+  usage
+fi
+
+message=$@
+curl -s \
+  --form-string "token=$application_token" \
+  --form-string  "user=$user_token" \
+  --form-string  "message=$message" \
+  https://api.pushover.net/1/messages.json \
+  | grep "\"status\":1," 1>/dev/null
+
+[[ $? -eq 0 ]] && echo "message sent" || echo "ERROR SENDING NOTIFICATION"
+
+printf '\a' #Rings bell

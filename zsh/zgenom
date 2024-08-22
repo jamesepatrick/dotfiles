@@ -1,0 +1,40 @@
+#!/usr/bin/env zsh
+# vim: syn=zsh
+
+source "${HOME}/.zgenom/zgenom.zsh"
+
+# Check for plugin and zgenom updates every 7 days
+# This does not increase the startup time.
+zgenom autoupdate
+
+if ! zgenom saved; then
+
+    zgenom load hlissner/zsh-autopair
+    zgenom load zsh-users/zsh-autosuggestions
+    zgenom load zsh-users/zsh-completions
+    zgenom load zdharma-continuum/fast-syntax-highlighting
+    zgenom load junegunn/fzf shell/key-bindings.zsh
+
+    if [ -n "$SSH_CONNECTION" ] ; then
+        zgenom load "${ZDIR}/modules/prompt/"
+    else
+        zgenom load "spaceship-prompt/spaceship-prompt"
+    fi
+
+    # load various modules
+    zgenom bin "${ZDIR}/modules/"
+    zgenom loadall <<EOPLUGINS
+         "${ZDIR}/modules/alias/"
+         "${ZDIR}/modules/complete/"
+         "${ZDIR}/modules/directory/"
+         "${ZDIR}/modules/history/"
+         "${ZDIR}/modules/keybinds/"
+         "${ZDIR}/modules/tmux/"
+EOPLUGINS
+
+    # save all to init script
+    zgenom save
+
+    # Compile your zsh files
+    zgenom compile "$HOME/.zshrc"
+fi

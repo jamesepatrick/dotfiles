@@ -1,0 +1,8 @@
+#!/usr/bin/env zsh
+# vim: syn=zsh
+
+source ~/.profile
+autoload -Uz edit-command-line
+zle -N edit-command-line
+
+env_loader zprofile

@@ -1,0 +1,22 @@
+#! env zsh
+# -*- sh -*-
+REPORT=`dirname $0`/report
+
+if [[ -z $1 ]] ; then
+  $REPORT error "ERROR: Symlink to delete does not exist.\n     symlink: $1"
+  exit
+fi
+
+if ! ( [[ -e $1 ]] || [[ -L $1 ]] ) ; then
+  $REPORT warn "$1 does not exist."
+  exit
+fi
+
+if [[ ! -L $1 ]] ; then
+  $REPORT warn "$1 is not a symbolic link. Skipping."
+  exit
+fi
+
+$REPORT pass "Deleting $1"
+rm  $1
+

@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+GIT_ROOT=$(git root 2> /dev/null)
+
+if [ -z "${GIT_ROOT}" ]; then
+  echo "Not in a git repo. Aborting."
+  exit 1
+fi
+
+if [[ -L ${GIT_ROOT}/todo.org ]] ; then
+  echo "Sym link already exist here."
+  exit 1
+fi
+
+if [[ ! -d ${HOME}/org/projects ]]; then
+  echo "No directory at \${HOME}/org/projects"
+  exit 1
+fi
+
+
+REPO_NAME=${GIT_ROOT##*/}
+TODO_ORG="${HOME}/org/projects/${REPO_NAME}.org"
+TODO_REPO="${GIT_ROOT}/todo.org"
+
+if [[ -e ${TODO_ORG} ]] && [[ -e ${TODO_REPO} ]] ; then
+  echo "Both todo.org and ${REPO_NAME}.org already exist."
+  exit 1;
+fi
+
+if [[ -e "${TODO_REPO}" ]] ; then
+  echo "Moving exist todo.org to ~/org"
+  mv "${TODO_REPO}" "${TODO_ORG}"
+else
+  touch "${TODO_ORG}"
+fi
+
+ln -vs "${TODO_ORG}" "${TODO_REPO}"

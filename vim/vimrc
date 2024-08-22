@@ -1,0 +1,150 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Sections:
+"    -> Plug Setup
+"    -> Brief Config
+"    -> Plugs & Configure
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PlugSetup:
+"    -> Auto Install Plug
+"    -> Auto Add Missing Plugs
+"    -> Add Conditional Helper
+"    -> Has Async
+
+" Install vim-plug if not found
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+endif
+
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
+" Convenience function for arbitrary conditional loading
+" See https://github.com/junegunn/vim-plug/wiki/tips#conditional-activation for more.
+function! Cond(cond, ...)
+  let opts = get(a:000, 0, {})
+  return a:cond ? opts : extend(opts, { 'on': [], 'for': [] })
+endfunction
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Brief Config:
+"    -> Sane Config Base
+"    -> Syntax Override AutoCMDs
+"    -> Leader Key
+"    -> Clip
+"    -> Has Async Var
+
+" Sane Config Based on Tpope's Vim-Sensible
+" https://github.com/tpope/vim-sensible
+source ~/.vim/vimrc.d/sensible.vim
+
+" Syntax Override AutoCMDs
+source ~/.vim/vimrc.d/syntaxoverrides.vim
+
+" Take me to your leader
+let mapleader=","
+
+" Clipboard
+" This requires +clipboard to be included in the compile.
+nnoremap Y "+y
+vnoremap Y "+y
+nnoremap yY ^"+y$
+
+" Added Async Var
+let g:has_async = v:version >= 800 || has('nvim')
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugs_Configure:
+"    -> Molokai Theme
+"    -> Git Gutter
+"    -> Rainbow Parens
+"    -> Auto Pair
+"    -> Vim Surround
+"    -> Vim Airline
+"    -> Vim Eunuch
+"    -> Nerdtree
+"    -> Incsearch
+"    -> EasyMotion
+"    -> Incsearch + EasyMotion
+"    -> Fzf
+"    -> ALE
+
+call plug#begin('~/.vim/plugged')
+
+" Theme
+Plug 'tomasr/molokai'
+  autocmd VimEnter * colorscheme molokai
+  hi LineNr ctermfg=245 ctermbg=235
+  let g:molokai_original=1
+  let g:rehash256=1
+  match ErrorMsg '\%>120v.\+'
+  match ErrorMsg '\s\+$'
+
+" GitGutter : Letting you know whats changed
+Plug 'airblade/vim-gitgutter'
+
+" Rainbow Parens : making at color term more useful
+Plug 'kien/rainbow_parentheses.vim'
+
+" Auto Pair : Vim plugin, insert or delete brackets, parens, quotes in pair
+Plug 'jiangmiao/auto-pairs'
+
+" Vim Surround : quoting/parenthesizing made simple
+Plug 'tpope/vim-surround'
+
+" Vim Airline : Modeline support
+Plug 'vim-airline/vim-airline'
+
+" Vim Eunuch : Helpers for UNIX
+Plug 'tpope/vim-eunuch'
+
+" Vim Polygot :  A solid language pack for Vim.
+Plug 'sheerun/vim-polyglot'
+
+" Nerdtree : A tree explorer plugin for vim.
+Plug 'scrooloose/nerdtree',           { 'on': 'NERDTreeToggle' }
+  map <leader>po :NERDTreeToggle<cr>
+
+" Incsearch : Improved incremental searching for Vim
+Plug 'haya14busa/incsearch.vim'
+
+" EasyMotion : Vim motions on speed!
+Plug 'easymotion/vim-easymotion'
+  let g:EasyMotion_smartcase = 1
+  map  <Leader>f <Plug>(easymotion-bd-f2)
+  nmap <Leader>f <Plug>(easymotion-overwin-f2)
+
+" Incsearch & EasyMotion : peanut butter & chocolate
+Plug 'haya14busa/incsearch-easymotion.vim'
+  map / <Plug>(incsearch-easymotion-/)
+  map ? <Plug>(incsearch-easymotion-?)
+  map g/ <Plug>(incsearch-easymotion-stay)
+
+" FZF : Fuzzy was he found
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+  let g:fzf_layout = { 'down': '40%' }
+  map <leader><tab> :History<cr>
+  map <leader>b :Buffers<cr>
+  map <leader><space> :Files<cr>
+
+" ALE : Asynchronous Lint Engine
+Plug 'dense-analysis/ale',            Cond(g:has_async)
+  if g:has_async
+    map <leader>= :ALEFix<cr>
+  endif
+  let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace']}
+  let g:ale_fix_on_save = 1
+  let g:ale_completion_enabled = 1
+
+call plug#end()
+
+" vim: set filetype=vim:
+" -*- mode: vim -*-

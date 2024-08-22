@@ -1,0 +1,29 @@
+#! env zsh
+# -*- sh -*-
+R='\033[0;31m'
+Y='\033[0;33m'
+G='\033[0;32m'
+MUTED='\033[0;37m'
+NC='\033[0m' # No Color
+
+format(){
+  case $1 in
+    "error")  echo -e "$R ✘  $2$NC";;
+    "warn")   echo -e "$Y ⚠  $2$NC";;
+    "pass")   echo -e "$G ✔  $2$NC";;
+    "info")  echo -e "$MUTED כֿ  $2$NC";;
+    "debug")  [[ -n ${debug+x} ]] && $0 info $2 ; true ;;
+    "header") echo -e  "=> $2";;
+    *) echo -e "$1: $2";;
+  esac
+}
+
+if [[ -z $2 ]] ; then
+  case "$LAST_RETURN" in
+    0) format pass $1;;
+    *) format error "FAILURE DURING: \"$1\"";;
+  esac
+else
+  format $1 $2
+fi
+

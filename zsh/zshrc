@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+# vim: syn=zsh
+
+source "${ZDIR}/modules/tmux/init.zsh"
+source "${ZDIR}/zgenom"
+
+env_loader zshrc

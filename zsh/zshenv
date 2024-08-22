@@ -1,0 +1,96 @@
+#!/usr/bin/env zsh
+# vim: syn=zsh
+
+# Language
+# TODO: LANG is getting set to "C" somewhere. Until I figure that out, I'm hard coding it.
+#export LANG=${LANG:-en_US.UTF-8}
+export LANG=en_US.UTF-8
+
+export ZDOTDIR=${ZDOTDIR:-$HOME}
+export ZDIR=${ZDIR:-$HOME/.zsh}
+export ZPLUG_HOME=${ZPLUG_HOME:-$HOME/.zplug}
+export ZSH_CACHE=${ZSH_CACHE:-$ZDIR/cache}
+
+export EDITOR='vim'
+export VISUAL='vim'
+export PAGER='less'
+# Less
+# Set the default Less options.
+# Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
+# Remove -X and -F (exit if the content fits on one screen) to enable it.
+export LESS='-F -g -i -M -R -S -w -X -z-4'
+
+# Modules for Prompt
+if [ -z "$SPACESHIP_PROMPT_ORDER" ]; then
+  SPACESHIP_PROMPT_ORDER=(
+    time          # Time stampts section
+    user          # Username section
+    dir           # Current directory section
+    host          # Hostname section
+    git           # Git section (git_branch + git_status)
+    package       # Package version
+    node          # Node.js section
+    ruby          # Ruby section
+    elm           # Elm section
+    golang        # Go section
+    rust          # Rust section
+    haskell       # Haskell Stack section
+    #docker        # Docker section
+    venv          # virtualenv section
+    #kubecontext   # Kubectl context section
+    terraform     # Terraform workspace section
+    exec_time     # Execution time
+    line_sep      # Line break
+    battery       # Battery level and status
+    jobs          # Background jobs indicator
+    exit_code     # Exit code section
+    char          # Prompt character
+  )
+fi
+
+# Set tmux profile default values.
+zstyle ':tmux:auto-start' local 'yes'
+zstyle ':tmux:auto-start' name 'tmux'
+
+# FZF tmux properties.
+FZF_TMUX=1
+FZF_TMUX_HEIGHT=30%
+# Add fzf functions
+export FZF_CTRL_T_OPTS="--preview \" (( $+commands[bat] )) \
+       && bat --color=always --line-range :500 {} \
+       || cat {} \""
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -100'"
+
+# Auto suggestion config
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=7"
+
+
+typeset -gUx -T PATH path
+path=(
+  "$HOME/.cargo/bin"
+  "$HOME/.scripts"
+  "$HOME/.emacs.d/bin/"
+  "$HOME/.yarn/bin/"
+  "$HOME/.config/yarn/global/node_modules/.bin/"
+  "$HOME/.local/bin/"
+  $path)
+
+# This will load the specified zsh files if they exist in the $ZDIR/environment directory.
+# It will load based on hostname & uname.
+env_loader(){
+  if [ $# -ne 1 ]; then
+    echo "Usage: env_loader file"
+    return 1
+  fi
+
+  if [ -e "${ZDIR}/environment/os/$OSTYPE/$1" ]; then
+   source "${ZDIR}/environment/os/$OSTYPE/$1"
+  fi
+  if [ -e "${ZDIR}/environment/host/$HOST/$1" ] ; then
+   source "${ZDIR}/environment/host/$HOST/$1"
+  fi
+}
+
+env_loader zshenv
+
+export PATH

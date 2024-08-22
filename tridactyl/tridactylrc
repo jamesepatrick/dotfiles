@@ -1,0 +1,75 @@
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+"░▀█▀░█▀▄░▀█▀░█▀▄░█▀█░█▀▀░▀█▀░█░█░█░░░█▀▄░█▀▀░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+"░░█░░█▀▄░░█░░█░█░█▀█░█░░░░█░░░█░░█░░░█▀▄░█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+"░░▀░░▀░▀░▀▀▀░▀▀░░▀░▀░▀▀▀░░▀░░░▀░░▀▀▀░▀░▀░▀▀▀░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+"
+
+" Clear the config
+sanitise tridactyllocal tridactylsync
+
+alias tabsort jsb browser.tabs.query({}).then(tabs => tabs.sort((t1, t2) => t1.url.localeCompare(t2.url)).forEach((tab, index) => browser.tabs.move(tab.id, {index})))
+alias tabuniq jsb browser.tabs.query({}).then(tabs => browser.tabs.remove(tabs.filter((tab, index) => tabs.slice(index + 1).find(t => t.url == tab.url)).map(tab => tab.id)))
+
+" Toggle expand/collapse for comments.
+bind ;c hint -c [class*="expand"],[class="togg"]
+bind ;B hint -qb
+
+" match vimperators back/forward function.
+command ba back
+command fo foward
+
+" restore buildin bookmarks
+unbind <C-b>
+
+" use h/l to cycle though tabs.
+bind h tabprev
+bind l tabnext
+
+set editorcmd "/usr/local/bin/emacsclient"
+
+" Better find.
+unbind <C-f>
+bind / fillcmdline find
+bind ? fillcmdline find -?
+bind n findnext 1
+bind N findnext -1
+bind ,<Space> nohlsearch
+
+bind <Space> fillcmdline_notrail
+
+" Settings
+set smoothscroll true
+set incsearch true
+
+" Use custom theme
+colorscheme onedark
+
+" Quick marks
+quickmark G https://github.com/
+quickmark g https://git.jpatrick.io/
+quickmark l https://lobste.rs/
+quickmark n https://news.ycombinator.com/
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Hic Sunt Dracones
+command fixamo js tri.excmds.setpref("privacy.resistFingerprinting.block_mozAddonManager", "true").then(tri.excmds.setpref("extensions.webextensions.restrictedDomains", '""').then(tri.excmds.fillcmdline_tmp(3000, "Permissions added to user.js. Please restart Firefox to make them take affect.")))
+command fixamo_quiet jsb tri.excmds.setpref("privacy.resistFingerprinting.block_mozAddonManager", "true").then(tri.excmds.setpref("extensions.webextensions.restrictedDomains", '""'))
+
+fixamo_quiet
+
+setpref browser.aboutConfig.showWarning false
+setpref extensions.pocket.enabled false
+"setpref dom.media.mediasession.enabled true
+setpref privacy.trackingprotection.fingerprinting.enabled true
+setpref privacy.trackingprotection.cryptomining.enabled  true
+setpref privacy.trackingprotection.enabled true
+setpref browser.urlbar.speculativeConnect.enabled false
+setpref network.cookie.cookieBehavior 1
+setpref beacon.enabled false
+setpref network.IDN_show_punycode true
+
+" vim: set filetype=vim:
+" -*- mode: vimrc -*-

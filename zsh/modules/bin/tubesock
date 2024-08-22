@@ -1,0 +1,24 @@
+#!/bin/bash
+#
+# The script tunnels all traffic on a machine to a remote hosts. It setups a
+# socks proxy then tunnels to machine via ssh. This can be use useful when you
+# need to test apis only accept connections from a whitelisted ip.
+#
+# This script is mac specific. There is likely a way to generalize the
+# configuration of the socks proxy, but this currently don't do that.
+#
+# Usage: tubesock example.com
+
+clean_up(){
+  networksetup -setsocksfirewallproxystate wi-fi off
+  echo "Goodbye."
+  exit 0
+}
+trap clean_up INT
+
+echo "Configuring..."
+networksetup -setsocksfirewallproxy wi-fi 127.0.0.1 1111
+echo "Socks proxy enabled"
+
+echo "Tunneling..."
+ssh -ND 1111 "${1}"

@@ -1,0 +1,2 @@
+#!/usr/bin/env zsh
+printf "%*s\n" $COLUMNS "SEE YOU SPACE COWBOY . . ."
