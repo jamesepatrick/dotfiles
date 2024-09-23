@@ -133,7 +133,7 @@ Plug 'junegunn/fzf.vim'
   let g:fzf_layout = { 'down': '40%' }
   map <leader><tab> :History<cr>
   map <leader>b :Buffers<cr>
-  map <leader><space> :Files<cr>
+  map <leader><space> :GitFiles<cr>
 
 " ALE : Asynchronous Lint Engine
 Plug 'dense-analysis/ale',            Cond(g:has_async)
