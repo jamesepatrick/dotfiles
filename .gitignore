@@ -8,8 +8,10 @@
 *todo.org
 
 ################################################################################
+# Local
+*local.config
+
 # Configs
-i3/config
 vim/backup/*
 vim/autoload/*
 vim/spell/*.spl

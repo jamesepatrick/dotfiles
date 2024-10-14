@@ -10,4 +10,6 @@ Host git.jpatrick.io
 Host *
   UseRoaming no
 
-Include config.d/*
+# Manually import edit the local file to import content.
+# git-crypt can cause issues where it will attempt to import encrypted binary as plain-text
+Include config.d/local
