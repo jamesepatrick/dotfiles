@@ -20,6 +20,6 @@ contact me.
 # Quick start
 
 ```sh
-git clone https://git.jpatrick.io/james/dotfiles.git ~/.dotfiles
+git clone https://github.com/jamesepatrick/dotfiles/
 make -C ~/.dotfiles install
 ```
