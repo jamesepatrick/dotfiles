@@ -83,6 +83,7 @@ brew "bash-language-server"
 brew "cmake"
 brew "editorconfig"
 brew "graphviz"
+brew "pandoc"
 brew "harfbuzz"
 brew "isync"
 brew "languagetool", restart_service: true
