@@ -5,7 +5,20 @@ include ../lib/shared.mk
 ZSH_DIR :=  ~/.zsh
 ZGENOM_DIR :=  ~/.zgenom
 
-up: init
+$(info => zsh)
+
+up: init_zgenom
+	$(info => Setting up zsh)
+	$(mk_link) $(SRC) ~/.zsh
+	$(mk_link) $(ZSH_DIR)/zshrc ~/.zshrc
+	$(mk_link) $(ZSH_DIR)/zlogin ~/.zlogin
+	$(mk_link) $(ZSH_DIR)/zprofile ~/.zprofile
+	$(mk_link) $(ZSH_DIR)/zshenv ~/.zshenv
+	$(mk_link) $(ZSH_DIR)/zlogout ~/.zlogout
+	mkdir -p $(ZSH_DIR)/cache \
+		; $(report) "Creating cache dir"
+	chmod 700 $(ZSH_DIR)/cache \
+		; $(report) "updating cache permissions"
 	if [ ! -d $(ZGENOM_DIR) ] ; then
 		$(report) error "$(ZGENOM_DIR) doesn't exist - run init first."
 		return
@@ -20,20 +33,11 @@ down:
 	$(rm_link) ~/.zsh
 	$(rm_link) ~/.zshenv
 	$(rm_link) ~/.zlogout
+	$(report) warn "cache dir not removed."
 
-init:
-	$(info => Setting up zsh)
-	$(MAKE) -C $(SRC) init_zgenom
-	$(mk_link) $(SRC) ~/.zsh
-	$(mk_link) $(ZSH_DIR)/zshrc ~/.zshrc
-	$(mk_link) $(ZSH_DIR)/zlogin ~/.zlogin
-	$(mk_link) $(ZSH_DIR)/zprofile ~/.zprofile
-	$(mk_link) $(ZSH_DIR)/zshenv ~/.zshenv
-	$(mk_link) $(ZSH_DIR)/zlogout ~/.zlogout
-	chmod 700 $(ZSH_DIR)/cache \
-		; $(report) "updating cache permissions"
 
 init_zgenom:
+	$(info => Setting up zgenom)
 	if [ -e $(ZGENOM_DIR) ] ; then
 	  $(report) debug "zgenom already installed. Skipping"
 		return
