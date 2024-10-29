@@ -611,6 +611,16 @@ Lets set the local leader to =,=. We may want to remap this to =;= later. Both o
 (setq which-key-idle-delay 0.1)
 #+end_src
 
+** Icons
+I make liberal use of the =nerd-icons-insert= function. To make it a little more acceptable I'm binding it to ~SPC i i~.
+
+#+begin_src emacs-lisp :tangle "+keybinds.el" :noweb no-export :comments no
+(map! :leader
+      (:prefix "i"
+       :desc "icons" "i" #'nerd-icons-insert
+       )
+      )
+#+end_src
 
 * Auto-Mode Alist
 Some files we'll need to set the major-mode for manually. Either based on where the file is located, or its extension. To do this add the value to the =auto-mode-alist= and specify the major mode.

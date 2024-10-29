@@ -5,6 +5,12 @@
 (setq doom-localleader-key ",")
 
 (map! :leader
+      (:prefix "i"
+       :desc "icons" "i" #'nerd-icons-insert
+       )
+      )
+
+(map! :leader
       (:when (modulep! :lang org +roam2)
         (:prefix-map ("r" . "roam")
          :desc "Find node"              "/"    #'org-roam-node-find
