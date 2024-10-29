@@ -1076,7 +1076,15 @@ Then configure this
 
 This does bind to company, which I've currently removed. See [[*Completion][Completion]] for specifics.
 
+To make it easier to toggle I'm binding this to ~SPC t C~
 
+#+begin_src emacs-lisp :tangle "+keybinds.el" :noweb no-export :comments no
+(map! :leader
+      (:prefix "t"
+       :desc "CoPilot" "C" #'copilot-mode
+       )
+      )
+#+end_src
 
 ** Keybinds
 

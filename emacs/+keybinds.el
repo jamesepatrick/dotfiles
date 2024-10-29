@@ -16,6 +16,12 @@
       )
 
 (map! :leader
+      (:prefix "t"
+       :desc "CoPilot" "C" #'copilot-mode
+       )
+      )
+
+(map! :leader
       (:prefix-map ("A" . "GPT")
        :desc "Menu"              "m"    #'gptel-menu
        :desc "Menu"              "a"    #'gptel-menu
