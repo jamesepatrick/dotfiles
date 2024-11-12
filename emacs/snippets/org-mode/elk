@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: Link Elment
-# uuid: lk
-# key: lk
+# uuid: elk
+# key: elk
 # --
 - 󰌷 ${1:link}

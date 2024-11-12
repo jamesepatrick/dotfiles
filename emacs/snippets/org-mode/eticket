@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Ticket Elment
+# uuid: tickete
+# key: tickete
+# --
+-  ${1:link}

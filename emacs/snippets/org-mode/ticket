@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Ticker Elment
-# uuid: ticket
-# key: ticket
-# --
--  ${1:link}

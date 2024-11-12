@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Gmail Link Elment
+# uuid: egmail
+# key: egmail
+# --
+- 󰊫 ${1:link}
