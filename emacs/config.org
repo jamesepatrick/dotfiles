@@ -1130,33 +1130,43 @@ While we'll want to store these snippets in this orgmode document, using the =+s
 In my work todo and my roam notes I've been using a list elements with nerd-fonts icons under my section header to provide quick links for the context. Below are a few that I've been using.
 
 -  [[github:github/example][github/example]]
-#+begin_src snippet :tangle "snippets/org-mode/gh"
+#+begin_src snippet :tangle "snippets/org-mode/egh"
 # -*- mode: snippet -*-
 # name: Github Element
-# uuid: gh
-# key: gh
+# uuid: egh
+# key: egh
 # --
 -  ${1:repo}
 #+end_src
 
 - 󰌷  [[https://example.com][example.com]]
-#+begin_src snippet :tangle "snippets/org-mode/lk"
+#+begin_src snippet :tangle "snippets/org-mode/elk"
 # -*- mode: snippet -*-
 # name: Link Elment
-# uuid: lk
-# key: lk
+# uuid: elk
+# key: elk
 # --
 - 󰌷 ${1:link}
 #+end_src
 
 -  [[https://example.com][Jira-12929]]
-#+begin_src snippet :tangle "snippets/org-mode/ticket"
+#+begin_src snippet :tangle "snippets/org-mode/eticket"
 # -*- mode: snippet -*-
-# name: Ticker Elment
-# uuid: ticket
-# key: ticket
+# name: Ticket Elment
+# uuid: tickete
+# key: tickete
 # --
 -  ${1:link}
+#+end_src
+
+- 󰊫  [[https://mail.google.com/mail/u/0/FMfcgzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa][Re:Salary Offer]]
+#+begin_src snippet :tangle "snippets/org-mode/egmail"
+# -*- mode: snippet -*-
+# name: Gmail Link Elment
+# uuid: egmail
+# key: egmail
+# --
+- 󰊫 ${1:link}
 #+end_src
 
 * Content Stolen From
