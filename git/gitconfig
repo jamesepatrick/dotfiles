@@ -1,10 +1,22 @@
 [alias]
 	root = rev-parse --show-toplevel
+[branch]
+	sort = -committerdate
+[column]
+	ui = auto
 [commit]
 	gpgsign = true
+	verbose = true
+[diff]
+	algorithm = histogram
+	renames = true
+	mnemonicPrefix = true
+	colorMoved = plain
 [core]
 	editor = vim
 	excludesfile = ~/.gitignore_global
+	fsmonitor = true
+	untrackedCache = true
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	process = git-lfs filter-process
@@ -18,8 +30,16 @@
 	path = ~/.gitconfig.local
 [init]
 	defaultBranch = main
+[pull]
+	rebase = true
 [push]
 	autoSetupRemote = true
+	followTags = true
+[rebase]
+	autoStash = true
+	updateRefs = true
+[tag]
+	sort = version:refname
 [user]
 	name = James Patrick
 	signingkey = ~/.ssh/github.com.pub
