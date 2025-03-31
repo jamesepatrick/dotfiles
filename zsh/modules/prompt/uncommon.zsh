@@ -1,6 +1,8 @@
 autoload -U colors \
   && colors
 
+setopt PROMPT_SUBST
+
 _UNCOMMON_COLOR_CURRENT_DIR=blue
 _UNCOMMON_COLOR_RETURN_TRUE=yellow
 _UNCOMMON_COLOR_RETURN_FALSE=red
