@@ -662,7 +662,7 @@ I've tried to organize things based on purpose & this will likely change in the 
 ├── _logseq
 ├── journals
 ├── projects
-├── roam
+├── pages
 └── work
 #+end_example
 
@@ -682,7 +682,7 @@ I keep a =todo.org= at the root of each project. These are symlinked into the Pr
 [[https://www.orgroam.com/][org-roam]] is a great Zettelkasten toolkit with back link graphing. I'll try to store as much of my written notes in this format.
 
 #+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
-(setq org-roam-directory (concat org-directory "roam"))
+(setq org-roam-directory (concat org-directory "pages"))
 #+end_src
 
 *** =todo=

@@ -8,7 +8,7 @@
 
 (setq org-download-image-dir (concat org-directory ".attach/"))
 
-(setq org-roam-directory (concat org-directory "roam"))
+(setq org-roam-directory (concat org-directory "pages"))
 
 (setq org-agenda-files (list (concat org-directory "todo" )))
 
