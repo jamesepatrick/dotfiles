@@ -13,7 +13,7 @@ init:
 fix_http_repo:
 	cd $(SRC_DIR)
 	if [[ $$(git remote get-url origin) == http* ]] ; then
-		git remote set-url origin git@git.jpatrick.io:james/dotfiles.git \
+		git remote set-url origin git@github.com:jamesepatrick/dotfiles.git \
 			; $(report) "Reseting git remote http(s) -> ssh repo"
 	else
 		$(report) debug "git repo deosn't start with http. So no need to reset remote."
