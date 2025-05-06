@@ -904,14 +904,10 @@ I use =org-roam=  v2 for most of my note taking. TODO expand this section.
 *** Dailies Templates
 #+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no :results output silent
 (setq org-roam-dailies-capture-templates
-      '(("l" "Log" entry "*  %T %?"
-         :target (file+head+olp "%<%Y-%m-%d>.org"
-                                "#+title: %<%Y-%m-%d>\n#+filetags: %<:%Y:%B:daily:>\n\n* Goals\n* Logs"
-                                ("Logs")))
-        ("g" "Goal" entry "* TODO %?"
-         :target (file+head+olp "%<%Y-%m-%d>.org"
-                                "#+title: %<%Y-%m-%d>\n#+filetags: %<:%Y:%B::daily>\n\n* Goals\n* Logs"
-                                ("Goals")))))
+      '(("d" "default" entry "*  %T %?"
+         :target (file+head "%<%Y-%m-%d>.org"
+                            "#+title: %<%Y-%m-%d>\n#+filetags: %<:%Y:%B:daily:>\n\n"))
+        ))
 #+end_src
 
 *** Keybinds

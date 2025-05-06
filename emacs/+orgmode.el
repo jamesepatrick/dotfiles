@@ -146,14 +146,10 @@
 (setq org-clock-into-drawer t)
 
 (setq org-roam-dailies-capture-templates
-      '(("l" "Log" entry "*  %T %?"
-         :target (file+head+olp "%<%Y-%m-%d>.org"
-                                "#+title: %<%Y-%m-%d>\n#+filetags: %<:%Y:%B:daily:>\n\n* Goals\n* Logs"
-                                ("Logs")))
-        ("g" "Goal" entry "* TODO %?"
-         :target (file+head+olp "%<%Y-%m-%d>.org"
-                                "#+title: %<%Y-%m-%d>\n#+filetags: %<:%Y:%B::daily>\n\n* Goals\n* Logs"
-                                ("Goals")))))
+      '(("d" "default" entry "*  %T %?"
+         :target (file+head "%<%Y-%m-%d>.org"
+                            "#+title: %<%Y-%m-%d>\n#+filetags: %<:%Y:%B:daily:>\n\n"))
+        ))
 
 (setq org-src-fontify-natively t
       org-src-preserve-indentation t
