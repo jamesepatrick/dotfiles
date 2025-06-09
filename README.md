@@ -21,5 +21,5 @@ contact me.
 
 ```sh
 git clone https://github.com/jamesepatrick/dotfiles/
-make -C ~/.dotfiles install
+make -C ~/.dotfiles up
 ```
