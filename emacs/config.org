@@ -1074,10 +1074,8 @@ Then configure this
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
   :bind (:map copilot-completion-map
-              ("<tab>" . 'copilot-accept-completion)
-              ("TAB" . 'copilot-accept-completion)
-              ("C-TAB" . 'copilot-accept-completion-by-word)
-              ("C-<tab>" . 'copilot-accept-completion-by-word)))
+              ("[tab]" . 'copilot-accept-completion)
+              ("[C-TAB]" . 'copilot-accept-completion-by-word)))
 #+end_src
 
 This does bind to company, which I've currently removed. See [[*Completion][Completion]] for specifics.
