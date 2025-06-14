@@ -1094,6 +1094,18 @@ To make it easier to toggle I'm binding this to ~SPC t C~
       )
 #+end_src
 
+*** Copilot Chat
+For interacting with Copilot Chat interface I'm using [[https://github.com/chep/copilot-chat.el][chep/copilot-chat]] package.
+
+#+BEGIN_SRC emacs-lisp :tangle "packages.el"
+(package! copilot-chat)
+#+END_SRC
+
+I'm still in early days for this package. For the time being I'm just turning this on & I'll configure it a later date.
+#+begin_src emacs-lisp
+(use-package! copilot-chat)
+#+end_src
+
 ** Keybinds
 
 | Keybind | Command             |

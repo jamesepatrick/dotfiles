@@ -49,3 +49,5 @@
   :bind (:map copilot-completion-map
               ("[tab]" . 'copilot-accept-completion)
               ("[C-TAB]" . 'copilot-accept-completion-by-word)))
+
+(use-package! copilot-chat)
