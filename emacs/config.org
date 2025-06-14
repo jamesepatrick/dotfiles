@@ -1059,7 +1059,11 @@ machine api.openai.com login apikey password TOKEN
 #+end_src
 
 ** TRAIL_RUN CoPilot
-I'm presently using GitHub copilot for work. It can best be summarized as having a intern periodically writing code for you. The code quality is so-so, and often buggy or incorrect. You will often spend as long debugging some of the code as you would have saved writing it yourself. But it is useful for the rote drudgery that occurs with some coding.
+I started using Copilot for work a while back. It has gotten significantly better since I first started writing. It's gone from overcaffinated intern level of quality to a highly niche response on stack overflow.  CoPilot have 3 parts.
+
+Use inside of GitHub (PR Reviews, Summaries, etc), Autocomplete++, and finally a chat prompt. I'll be adding the latter to my Emacs.
+
+*** Autocomplete++
 
 For this I'm going to use [[https://github.com/copilot-emacs/copilot.el][copilot-emacs/copilot.el]].
 
