@@ -1182,6 +1182,15 @@ There's a lot of useful features for this package that hard hidden away behind l
      )
 #+end_src
 
+**** Commits
+Copilot Chat can be tied into a bunch of different features. For example, we can use it to generate commit messages. This is done by using the =copilot-chat-insert-commit-message= function. This will prompt for a commit message, and then insert it into the current buffer.
+
+#+begin_src emacs-lisp :tangle "+keybinds.el" :noweb no-export :comments no
+(map! :map git-commit-mode-map
+      :localleader
+      "g" #'copilot-chat-insert-commit-message
+      )
+#+end_src
 ** Keybinds
 
 | Keybind | Command             |

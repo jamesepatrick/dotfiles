@@ -63,6 +63,12 @@
        )
       )
      )
+
+(map! :map git-commit-mode-map
+      :localleader
+      "g" #'copilot-chat-insert-commit-message
+      )
+
 (map! :leader
       (:prefix-map ("A" . "GPT")
        :desc "Menu"              "m"    #'gptel-menu
