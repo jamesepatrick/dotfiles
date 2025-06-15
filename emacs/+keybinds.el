@@ -2,6 +2,12 @@
 ;;; This file is generated via tangles from the config.org file. Do not modify this file.
 ;;; Any modifications here will be clobbered and versioned over. Seriously just don't.
 
+(map! :map git-commit-mode-map
+      :localleader
+      "n" #'git-commit-next-message
+      "p" #'git-commit-prev-message
+      )
+
 (setq doom-localleader-key ",")
 
 (map! :leader

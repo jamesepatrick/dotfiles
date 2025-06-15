@@ -414,6 +414,17 @@ machine api.github.com login yourlogin^code-review password MYTOKENGOESHERE
 #+end_src
 
 For more on Forge see [[https://magit.vc/manual/forge.html][Magit's Forge documentation]].
+**** Commit Mode
+There's no local mode for commit-mode, so lets add some basics
+
+#+begin_src emacs-lisp :tangle "+keybinds.el" :noweb no-export :comments no
+(map! :map git-commit-mode-map
+      :localleader
+      "n" #'git-commit-next-message
+      "p" #'git-commit-prev-message
+      )
+#+End_src
+
 ** Language
 https://github.com/doomemacs/doomemacs/tree/master/modules/lang
 
