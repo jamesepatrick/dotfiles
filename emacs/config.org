@@ -1052,23 +1052,6 @@ The default =+org-capture/open-frame= is a little small. Let's modify the parame
 * GPT
 GPT is more useful than I thought. Its incredibly helpful for writing prose which I can struggle with due to mild dysgraphia.
 
-** ChatGPT
-We will be using the [[https://github.com/karthink/gptel][karthink/gptel]] package.
-
-#+BEGIN_SRC emacs-lisp :tangle "packages.el"
-(package! gptel)
-#+END_SRC
-
-#+begin_src emacs-lisp :tangle "config.el" :noweb no-export :comments no
-(use-package! gptel)
-#+end_src
-
-This package supports multiple LLM backends. I'm going to be using the OpenAI ChatGPT backend by default. We'll need to set the API key. There are a couple ways this can be done, but we're going to set this using =~/.authinfo.gpg=. This will need to be decrypted before use, but this is pretty minor.
-
-#+begin_src authinfo :tangle no
-machine api.openai.com login apikey password TOKEN
-#+end_src
-
 ** TRAIL_RUN CoPilot
 I started using Copilot for work a while back. It has gotten significantly better since I first started writing. It's gone from overcaffinated intern level of quality to a highly niche response on stack overflow.  CoPilot have 3 parts.
 
@@ -1202,31 +1185,6 @@ Copilot Chat can be tied into a bunch of different features. For example, we can
 (map! :map git-commit-mode-map
       :localleader
       "g" #'copilot-chat-insert-commit-message
-      )
-#+end_src
-** Keybinds
-
-| Keybind | Command             |
-|---------+---------------------|
-| =SPC A a= | =gptel-menu=          |
-| =SPC A c= | =gptel-system-prompt= |
-| =SPC A m= | =gptel-menu=          |
-| =SPC A o= | =gptel=               |
-| =SPC A r= | =gptel-rewrite-menu=  |
-| =SPC A s= | =gptel-send=          |
-| =SPC A t= | =gptel-set-topic=     |
-
-#+begin_src emacs-lisp :tangle "+keybinds.el" :noweb no-export :comments no
-(map! :leader
-      (:prefix-map ("A" . "GPT")
-       :desc "Menu"              "m"    #'gptel-menu
-       :desc "Menu"              "a"    #'gptel-menu
-       :desc "Send"              "s"    #'gptel-send
-       :desc "Open Session"      "o"    #'gptel
-       :desc "Set Topic"         "t"    #'gptel-set-topic
-       :desc "Rewrite"           "r"    #'gptel-rewrite-menu
-       :desc "Change Prompt"     "c"    #'gptel-system-prompt
-       )
       )
 #+end_src
 * Snippets

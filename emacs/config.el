@@ -42,8 +42,6 @@
 
 (load! "+orgmode")
 
-(use-package! gptel)
-
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
   :bind (:map copilot-completion-map

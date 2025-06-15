@@ -74,15 +74,3 @@
       :localleader
       "g" #'copilot-chat-insert-commit-message
       )
-
-(map! :leader
-      (:prefix-map ("A" . "GPT")
-       :desc "Menu"              "m"    #'gptel-menu
-       :desc "Menu"              "a"    #'gptel-menu
-       :desc "Send"              "s"    #'gptel-send
-       :desc "Open Session"      "o"    #'gptel
-       :desc "Set Topic"         "t"    #'gptel-set-topic
-       :desc "Rewrite"           "r"    #'gptel-rewrite-menu
-       :desc "Change Prompt"     "c"    #'gptel-system-prompt
-       )
-      )
