@@ -39,7 +39,6 @@
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
        (emoji +unicode)  ; 🙂
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
-       ;;hydra
        ;;indent-guides     ; highlighted indent columns
        ;;ligatures         ; ligatures and symbols to make your code pretty again
        ;;minimap           ; show a map of the code on the side
@@ -48,6 +47,7 @@
        neotree           ; a project drawer, like NERDTree for vim
        ophints           ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
+       ;;smooth-scroll     ; So smooth you won't believe it's not butter
        ;;tabs              ; a tab bar for Emacs
        (treemacs          ; a project drawer, like neotree but cooler
         +lsp)
@@ -76,6 +76,7 @@
        :emacs
        dired             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
+       ;;eww               ; the internet is gross
        (ibuffer +icons)  ; interactive buffer management
        (undo +tree)             ; persistent, smarter undo for your inevitable mistakes
        vc                ; version-control and Emacs, sitting in a tree
@@ -105,18 +106,16 @@
        editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
-       ;;gist              ; interacting with github gists
        (lookup              ; navigate your code and its documentation
         +dictionary
         +docset
         +offline)
+       ;;llm                 ; when I said you needed friends, I didn't mean...
        (lsp +peek)              ; M-x vscode
        (magit +forge)      ; a git porcelain for Emacs
        make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
        ;;pdf               ; pdf enhancements
-       ;;prodigy           ; FIXME managing external services & code builders
-       ;;rgb               ; creating color strings
        (terraform         ; infrastructure as code
         +lsp)
        ;;tmux              ; an API for interacting with tmux
@@ -124,7 +123,8 @@
        ;;upload            ; map local to remote projects via ssh/ftp
 
        :os
-       (:if IS-MAC macos)  ; improve compatibility with macOS
+       (:if (featurep :system 'macos) macos)
+       ;;tty               ; improve the terminal Emacs experience
 
        :lang
        ;;agda              ; types of types of types of types...
@@ -159,6 +159,7 @@
        (json              ; At least it ain't XML
         +lsp
         +tree-sitter)
+       ;;janet             ; Fun fact: Janet is me!
        ;;(java +lsp)       ; the poster child for carpal tunnel syndrome
        (javascript        ; all(hope(abandon(ye(who(enter(here))))))
         +lsp
@@ -183,6 +184,7 @@
         +roam2)
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
+       ;;graphviz          ; diagrams for confusing yourself even more
        ;;purescript        ; javascript, but functional
        (python            ; beautiful is better than ugly
         +lsp
@@ -225,7 +227,6 @@
        ;;everywhere        ; *leave* Emacs!? You must be joking
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
-       ;;twitter           ; twitter client https://twitter.com/vnought
 
        :config
        literate
