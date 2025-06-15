@@ -1106,6 +1106,82 @@ I'm still in early days for this package. For the time being I'm just turning th
 (use-package! copilot-chat)
 #+end_src
 
+
+This is a very feature rich package. It has a lot of features that I haven't explored yet. For the time being I'm just going to bind it to ~SPC o c~. This will open the chat interface in a new buffer. This is similar to how =gptel= works, but it has a lot more features.
+
+To launch this use ~SPC o c~ .
+
+#+begin_src emacs-lisp :tangle "+keybinds.el" :noweb no-export :comments no
+(map! :leader
+      (:prefix "o"
+       :desc "Copilot Chat" "c" #'copilot-chat
+       )
+      )
+#+end_src
+
+
+There's a lot of useful features for this package that hard hidden away behind long function names.  I'm going to use ~SPC m~ as a prefix to surface these commands. I may change this prefix later as I don't love this, but it will work for now.
+
+| Keybind   | Command                                | Description                    |
+|-----------+----------------------------------------+--------------------------------|
+| =SPC m k=   | =copilot-chat-transient=                 | Transient Options              |
+| =SPC m a=   | =copilot-chat-add-current-buffer=        | Adds current buffer to context |
+| =SPC m g=   | =copilot-chat-switch-to-buffer=          | Open buffer                    |
+| =SPC m x=   | =copilot-chat-hide=                      | Hide Chat Window               |
+| =SPC m i=   | =copilot-chat-ask-and-insert=            | Ask and insert prompt          |
+| =SPC m m=   | =copilot-chat-set-model=                 | Select Models                  |
+| =SPC m q=   | =copilot-chat-custom-prompt-mini-buffer= | Quick prompt                   |
+| =SPC m r=   | =copilot-chat-reset=                     | Resets Chat & History          |
+|-----------+----------------------------------------+--------------------------------|
+| =SPC m c a= | =copilot-chat-add-buffers=               | Add buffer to Context          |
+| =SPC m c f= | =copilot-chat-add-file=                  | Add file to Context            |
+| =SPC m c r= | =copilot-chat-del-buffers=               | Remove file from Context       |
+| =SPC m c l= | =copilot-chat-list=                      | List files in Context          |
+| =SPC m c w= | =copilot-chat-add-workspace=             | Add Workspace to Context       |
+| =SPC m c d= | =copilot-chat-add-files-under-dir=       | Add Directory to Context       |
+| =SPC m c c= | =copilot-chat-transient-code=            | Transient Context              |
+|-----------+----------------------------------------+--------------------------------|
+| =SPC m h e= | =copilot-chat-explain=                   | Explain                        |
+| =SPC m h d= | =copilot-chat-doc=                       | Add Documentation              |
+| =SPC m h f= | =copilot-chat-fix=                       | Fix                            |
+| =SPC m h o= | =copilot-chat-optimize=                  | Optimize                       |
+| =SPC m h t= | =copilot-chat-test=                      | Write Tests                    |
+| =SPC m h c= | =copilot-chat-custom-prompt-function=    | Custom                         |
+|-----------+----------------------------------------+--------------------------------|
+
+#+begin_src emacs-lisp :tangle "+keybinds.el" :noweb no-export :comments no
+(map! :leader
+      (:prefix-map ("m" . "Copilot Magic")
+       :desc "Transient"          "k"    #'copilot-chat-transient
+       :desc "Add Current Buffer" "a"    #'copilot-chat-add-current-buffer
+       :desc "Go To"              "g"    #'copilot-chat-switch-to-buffer
+       :desc "Hide"               "x"    #'copilot-chat-hide
+       :desc "Ask & Insert"       "i"    #'copilot-chat-ask-and-insert
+       :desc "Select Model"       "m"    #'copilot-chat-set-model
+       :desc "Quick Prompt"       "q"    #'copilot-chat-custom-prompt-mini-buffer
+       :desc "Reset"              "r"    #'copilot-chat-reset
+       :desc "Quick Prompt"       "q"    #'copilot-chat-custom-prompt-mini-buffer
+       :desc "Quick Prompt"       "q"    #'copilot-chat-custom-prompt-mini-buffer
+       (:prefix-map ("c" . "Context")
+          :desc "Add Current Buffer" "a" #'copilot-chat-add-current-buffer
+          :desc "Add File"           "f" #'copilot-chat-add-file
+          :desc "Remove Buffer"      "r" #'copilot-chat-del-buffers
+          :desc "List Files"         "l" #'copilot-chat-list
+          :desc "Add Workspace"      "w" #'copilot-chat-add-workspace
+          :desc "Add Directory"      "d" #'copilot-chat-add-files-under-dir
+          :desc "Transient Code"     "c" #'copilot-chat-transient-code)
+       (:prefix-map ("h" . "Helper")
+          :desc "Explain"             "e" #'copilot-chat-explain
+          :desc "Documentation"       "d" #'copilot-chat-doc
+          :desc "Fix"                 "f" #'copilot-chat-fix
+          :desc "Optimize"            "o" #'copilot-chat-optimize
+          :desc "Test"                "t" #'copilot-chat-test
+          :desc "Custom Prompt"       "c" #'copilot-chat-custom-prompt-function
+       )
+      )
+     )
+#+end_src
+
 ** Keybinds
 
 | Keybind | Command             |
