@@ -1099,7 +1099,10 @@ For interacting with Copilot Chat interface I'm using [[https://github.com/chep/
 
 I'm still in early days for this package. For the time being I'm just turning this on & I'll configure it a later date.
 #+begin_src emacs-lisp
-(use-package! copilot-chat)
+(use-package! copilot-chat
+  :config
+  (setq copilot-chat-default-model "claude-sonnet-4")
+  )
 #+end_src
 
 
