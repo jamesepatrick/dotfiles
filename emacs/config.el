@@ -48,6 +48,8 @@
   :hook (prog-mode . copilot-mode)
   :bind (:map copilot-completion-map
               ("[tab]" . 'copilot-accept-completion)
-              ("[C-TAB]" . 'copilot-accept-completion-by-word)))
+              ("[M-tab]" . 'copilot-accept-completion)
+              ("M-n" . 'copilot-accept-completion) ; Fallback should tab act weird
+              ))
 
 (use-package! copilot-chat)
