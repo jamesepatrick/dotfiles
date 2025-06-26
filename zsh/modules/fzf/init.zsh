@@ -8,9 +8,10 @@ if command -v fzf >/dev/null 2>&1; then
     if is-at-least "0.48.0" "$fzf_version"; then
         source <(fzf --zsh)
     else
+        dir=$(dirname "$0")
         # Load legacy key bindings and completion
-        source completion.zsh
-        source key-bindings.zsh
+        source "${dir}/completion.zsh"
+        source "${dir}/key-bindings.zsh"
     fi
 fi
 #+END_SRC
