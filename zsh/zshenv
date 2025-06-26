@@ -23,28 +23,28 @@ export LESS='-F -g -i -M -R -S -w -X -z-4'
 # Modules for Prompt
 if [ -z "$SPACESHIP_PROMPT_ORDER" ]; then
   SPACESHIP_PROMPT_ORDER=(
-    time          # Time stampts section
-    user          # Username section
-    dir           # Current directory section
-    host          # Hostname section
-    git           # Git section (git_branch + git_status)
-    package       # Package version
-    node          # Node.js section
-    ruby          # Ruby section
-    elm           # Elm section
-    golang        # Go section
-    rust          # Rust section
-    haskell       # Haskell Stack section
+    time    # Time stampts section
+    user    # Username section
+    dir     # Current directory section
+    host    # Hostname section
+    git     # Git section (git_branch + git_status)
+    package # Package version
+    node    # Node.js section
+    ruby    # Ruby section
+    elm     # Elm section
+    golang  # Go section
+    rust    # Rust section
+    haskell # Haskell Stack section
     #docker        # Docker section
-    venv          # virtualenv section
+    venv # virtualenv section
     #kubecontext   # Kubectl context section
-    terraform     # Terraform workspace section
-    exec_time     # Execution time
-    line_sep      # Line break
-    battery       # Battery level and status
-    jobs          # Background jobs indicator
-    exit_code     # Exit code section
-    char          # Prompt character
+    terraform # Terraform workspace section
+    exec_time # Execution time
+    line_sep  # Line break
+    battery   # Battery level and status
+    jobs      # Background jobs indicator
+    exit_code # Exit code section
+    char      # Prompt character
   )
 fi
 
@@ -77,17 +77,17 @@ path=(
 
 # This will load the specified zsh files if they exist in the $ZDIR/environment directory.
 # It will load based on hostname & uname.
-env_loader(){
+env_loader() {
   if [ $# -ne 1 ]; then
     echo "Usage: env_loader file"
     return 1
   fi
 
   if [ -e "${ZDIR}/environment/os/$OSTYPE/$1" ]; then
-   source "${ZDIR}/environment/os/$OSTYPE/$1"
+    source "${ZDIR}/environment/os/$OSTYPE/$1"
   fi
-  if [ -e "${ZDIR}/environment/host/$HOST/$1" ] ; then
-   source "${ZDIR}/environment/host/$HOST/$1"
+  if [ -e "${ZDIR}/environment/host/$HOST/$1" ]; then
+    source "${ZDIR}/environment/host/$HOST/$1"
   fi
 }
 
