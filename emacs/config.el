@@ -50,4 +50,7 @@
               ("M-n" . 'copilot-accept-completion) ; Fallback should tab act weird
               ))
 
-(use-package! copilot-chat)
+(use-package! copilot-chat
+  :config
+  (setq copilot-chat-default-model "claude-sonnet-4")
+  )
