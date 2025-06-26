@@ -13,9 +13,8 @@ if ! zgenom saved; then
     zgenom load zsh-users/zsh-autosuggestions
     zgenom load zsh-users/zsh-completions
     zgenom load zdharma-continuum/fast-syntax-highlighting
-    zgenom load junegunn/fzf shell/key-bindings.zsh
 
-    if [ -n "$SSH_CONNECTION" ] ; then
+    if [ -n "$SSH_CONNECTION" ]; then
         zgenom load "${ZDIR}/modules/prompt/"
     else
         zgenom load "spaceship-prompt/spaceship-prompt"
@@ -27,6 +26,7 @@ if ! zgenom saved; then
          "${ZDIR}/modules/alias/"
          "${ZDIR}/modules/complete/"
          "${ZDIR}/modules/directory/"
+         "${ZDIR}/modules/fzf/"
          "${ZDIR}/modules/history/"
          "${ZDIR}/modules/keybinds/"
          "${ZDIR}/modules/tmux/"
