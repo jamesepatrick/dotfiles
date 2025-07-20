@@ -704,24 +704,61 @@ Incomplete list of todo files as there is always more.
 (setq org-agenda-files (list (concat org-directory "todo" )))
 #+end_src
 
-*** Journals
+*** =journals=
 Dailies. This is also handled by Org-roam.
 
 #+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
 (setq org-roam-dailies-directory (concat org-directory "journals/"))
 #+end_src
 
-*** =Work=
-I still want to capture work related notes where ever I am though.
+*** =work=
+For record keeping I want to keep work related project notes in the work directory.
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(defvar org-directory-work (concat org-directory "work/") "Location for work subdirectory.")
+#+end_src
+
+The primary work horse here is the =work/todo.org= file. This keep track of hours (for organization labor capitalization) and my rolling todo list. The todo list is broken into 4 headers that serves as ticking tracking and items get refiled from section to section.
+
+- Current :: Items currently getting worked. I try to keep a WIP count of 1, that doesn't often happen by I try.
+- Inbox :: Items to get to next
+- Follow Up ::  Catchall for things I can do quiet yet. This includes stuff that has been delegated to others or blocked due to external factors. Includes waiting for subject expert to come back from break, Supervising projects that require periodic check ins, and time sensitive deployments.
+- Wait :: Honestly no clue why this is here. This appears to be a duplicate to "Follow Up"?
+
+I have a ~org-capture~ to add things to the "Inbox" header.  A date is also added. This theorically could just be tracked via the git commit ([[*Syncing][see syncing]]), but the git churn from refiling makes this a bit of a pain.
 
 #+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
 (defvar-local +org-capture-work-todo-file
-    (expand-file-name "Work/todo.org" org-directory))
+    (expand-file-name "todo.org" org-directory-work))
 (add-to-list 'org-capture-templates
              '("w" "Work Todo" entry
                (file+headline +org-capture-work-todo-file "Inbox")
                "* [_] %i%?\n%a -  %u" :prepend t))
 #+end_src
+
+To further reduce the friction of adding tasks there is a raycast script to add these items.
+
+#+begin_src bash :tangle no :noweb no-export :comments no
+#!/bin/bash
+
+# Required parameters:
+# @raycast.schemaVersion 1
+# @raycast.title Org Capture
+# @raycast.mode silent
+
+# Optional parameters:
+# @raycast.icon 🤖
+#
+# @raycast.argument1 { "type": "text", "placeholder": "Message" }
+
+# Documentation:
+# @raycast.author jpatrick
+# @raycast.authorURL https://raycast.com/jpatrick
+#
+emacsclient -a "" -e "(+org-capture/open-frame \"$1\" \"w\")"
+#+end_src
+
+This will pop up a new =org-capture= window with the title provided.
 
 ** Syncing
 Syncing of the  ~org-directory~ is done via git with remote of https://github.com/jamesepatrick/notes. Changes are auto-committed & pushed using [[https://github.com/ryuslash/git-auto-commit-mode][git-auto-commit-mode]] in  Emacs & [[https://workingcopy.app/][Working Copy]] with iOS Shortcuts on iOS.

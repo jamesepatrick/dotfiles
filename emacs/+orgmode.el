@@ -14,8 +14,10 @@
 
 (setq org-roam-dailies-directory (concat org-directory "journals/"))
 
+(defvar org-directory-work (concat org-directory "work/") "Location for work subdirectory.")
+
 (defvar-local +org-capture-work-todo-file
-    (expand-file-name "Work/todo.org" org-directory))
+    (expand-file-name "todo.org" org-directory-work))
 (add-to-list 'org-capture-templates
              '("w" "Work Todo" entry
                (file+headline +org-capture-work-todo-file "Inbox")
