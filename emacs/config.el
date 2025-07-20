@@ -12,7 +12,7 @@
 (setq-hook! 'sql-mode-hook +format-with 'pgformatter)
 
 (setq ispell-dictionary "en"
-      ispell-personal-dictionary "~/org/.ispell.en.pws")
+      ispell-personal-dictionary (concat org-directory ".ispell.en.pws"))
 
 (setq doom-fallback-buffer-name "Doom"
       +doom-dashboard-name "Doom Dashboard")

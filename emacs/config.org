@@ -371,7 +371,7 @@ grammar           ; tasing grammar mistake every you make
 *** Custom Dictionary
 #+begin_src emacs-lisp :tangle "config.el" :noweb no-export :comments no
 (setq ispell-dictionary "en"
-      ispell-personal-dictionary "~/org/.ispell.en.pws")
+      ispell-personal-dictionary (concat org-directory ".ispell.en.pws"))
 #+end_src
 ** Tools
 https://github.com/doomemacs/doomemacs/tree/master/modules/tools
@@ -792,7 +792,7 @@ This snippet below is from siatwe's comment [[https://github.com/ryuslash/git-au
   (advice-add 'gac-push :before #'gac-pull-before-push))
 #+end_src
 
-Configuring should be done at the at the [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables][per directory level]].  The following snippet should be placed at =$HOME/org/.dir-locals.el=.
+Configuring should be done at the at the [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables][per directory level]].  The following snippet should be placed at =$org-directory/.dir-locals.el=.
 
 #+begin_src emacs-lisp :tangle no :comments no :results output silent
 ((nil . ((eval git-auto-commit-mode 1)
