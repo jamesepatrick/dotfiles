@@ -535,7 +535,7 @@ https://github.com/doomemacs/doomemacs/tree/master/modules/app
 
 #+name:doom-app
 #+begin_src emacs-lisp :tangle no
-;;calendar
+calendar
 ;;emms
 ;;everywhere        ; *leave* Emacs!? You must be joking
 ;;irc               ; how neckbeards socialize
@@ -697,13 +697,6 @@ I keep a =todo.org= at the root of each project. These are symlinked into the Pr
 (setq org-roam-directory (concat org-directory "pages"))
 #+end_src
 
-*** =todo=
-Incomplete list of todo files as there is always more.
-
-#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
-(setq org-agenda-files (list (concat org-directory "todo" )))
-#+end_src
-
 *** =journals=
 Dailies. This is also handled by Org-roam.
 
@@ -799,8 +792,6 @@ Configuring should be done at the at the [[https://www.gnu.org/software/emacs/ma
          (gac-automatically-push-p t)
          (gac-automatically-add-new-files-p t))))
 #+end_src
-
-
 
 ** A Prettier Orgmode
 *** Use a serif variable font
@@ -990,6 +981,66 @@ The default =+org-capture/open-frame= is a little small. Let's modify the parame
                                       ))
 #+end_src
 
+** Calendaring
+My household is pretty well tied into the Apple ecosystem, and for this context tied to Apple's iCloud Calendars. Apple being Apple makes this difficult to deal with for non-Apple systems. The best way to get this to work seems to by using  [[https://github.com/pimutils/vdirsyncer/][vdirsyncer]] & [[https://github.com/pimutils/khal/][khal]] as an intermediary, then use [[https://github.com/emacsmirror/khalel][khalel]] for the last mile to Emacs. See here for a jumping off point see =vdirsyncer='s [[https://vdirsyncer.pimutils.org/en/stable/tutorials/icloud.html][iCloud tutorial]].
+
+#+begin_src mermaid :results output :tangle no :file ".resources/cal-dirgram.svg" :background-color transparent
+---
+config:
+  theme: dark
+---
+flowchart LR
+    icloud@{ shape: lin-rect, label: " iCloud Calendar" }
+    vdirsyncer["vdirsyncer"]
+    khal["khal"]
+    khalel["khalel"]
+    icloud<-->vdirsyncer
+    vdirsyncer<-->khal
+    khal<-->khalel
+    click vdirsyncer "https://github.com/pimutils/vdirsyncer/"
+    click khal "https://github.com/pimutils/khal/"
+    click khalel "https://github.com/emacsmirror/khalel"
+#+end_src
+
+#+RESULTS:
+[[file:.resources/cal-dirgram.svg]]
+
+Setting up =vdirsyncer= & =khal= is outside the scope of this document.  Lets quickly setup =khalel= to work with =khal=. First install the package from MELPA.
+
+#+begin_src emacs-lisp :tangle "packages.el" :noweb no-export :comments no :results output silent
+(package! khalel)
+#+end_src
+
+Then configure it.  The snippet below will configure this with the following parameters.
+
+1. Calendar  file is located at =~/$org-directory/calendar.org=.
+2. It totally will overwrite the file.
+3. There is a rotating 90 day time frame to import details into the calendar.
+
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(use-package! khalel
+  :after org
+  :config
+  (khalel-add-capture-template)
+  (setq khalel-capture-key "e")
+  (setq khalel-import-org-file (concat org-directory "/" "calendar.org"))
+  (setq khalel-import-org-file-confirm-overwrite nil)
+  (setq khalel-import-end-date "+90d")
+)
+#+end_src
+
+Note: Due to implementation limitations there is no way to get the calendar color at this point in time. =khalel= presently uses =khal='s [[https://khal.readthedocs.io/en/stable/usage.html#cmdoption-format][format flag]]  to produce the results. The ~calendar-color~ argument "changes the output color to the calendar's color". This sends the escape characters to change the color of the string. These characters don't get saved in the output. I may fork this project to use the khal's [[https://khal.readthedocs.io/en/stable/usage.html#cmdoption-json][json output]] flag.
+
+** Agenda
+We want to add all files in the =org-directory= and =org-directory-work= ([[*=work=][ref]]). I'm not sure if =org-agenda-files= is recursive or not so this may be redundant.
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(setq org-agenda-files
+      (list org-directory org-directory-work))
+#+end_src
+
+See [[*Calendaring][calendaring]] for related information.
 * GPT
 GPT is more useful than I thought. Its incredibly helpful for writing prose which I can struggle with due to mild dysgraphia.
 

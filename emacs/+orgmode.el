@@ -10,8 +10,6 @@
 
 (setq org-roam-directory (concat org-directory "pages"))
 
-(setq org-agenda-files (list (concat org-directory "todo" )))
-
 (setq org-roam-dailies-directory (concat org-directory "journals/"))
 
 (defvar org-directory-work (concat org-directory "work/") "Location for work subdirectory.")
@@ -95,3 +93,16 @@ See https://emacs.stackexchange.com/questions/63517/org-mode-evaluate-diff-code-
                                       (height . 20)
                                       (transient . t)
                                       ))
+
+(use-package! khalel
+  :after org
+  :config
+  (khalel-add-capture-template)
+  (setq khalel-capture-key "e")
+  (setq khalel-import-org-file (concat org-directory "/" "calendar.org"))
+  (setq khalel-import-org-file-confirm-overwrite nil)
+  (setq khalel-import-end-date "+90d")
+)
+
+(setq org-agenda-files
+      (list org-directory org-directory-work))
