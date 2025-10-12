@@ -16,6 +16,10 @@ if [[ -n $env_array ]]; then
     return 0
 fi
 
+if [ "$TERMINAL_EMULATOR" = "JetBrains-JediTerm" ]; then
+  return 0
+fi
+
 if  ( [[ -n "$SSH_TTY" ]] && zstyle -t ':tmux:auto-start' remote ) ||  \
     ( [[ -z "$SSH_TTY" ]] && zstyle -t ':tmux:auto-start' local ) \
    ; then
