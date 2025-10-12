@@ -42,17 +42,17 @@ cask "gimp"
 cask "iterm2"
 cask "nextcloud"
 cask "postgres-unofficial"
-cask "protonmail-bridge"
+cask "proton-mail-bridge"
 cask "raycast"
 cask "slack"
 cask "spotify"
 cask "sublime-text"
 cask "tailscale"
-cask "todoist"
+cask "todoist-app"
 cask "visual-studio-code"
 cask "whatsapp"
 cask "zoom"
-mas "Fantastical", id: 975_937_182
+cask "fantastical"
 
 
 #emacs
