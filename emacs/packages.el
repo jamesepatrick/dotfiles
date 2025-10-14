@@ -4,6 +4,10 @@
 
 (package! git-auto-commit-mode)
 
+(package! mermaid-ts-mode)
+
+(package! mermaid-mode)
+
 (package! ob-mermaid)
 
 (package! ox-tufte)
