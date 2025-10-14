@@ -69,7 +69,9 @@ See https://emacs.stackexchange.com/questions/63517/org-mode-evaluate-diff-code-
     (with-current-buffer "*patch*" (buffer-string))
       (kill-buffer "*patch*"))))
 
-(use-package! ox-tufte)
+(use-package! ox-tufte
+  :interpreter "org"
+  )
 
 (after! org
   (setq org-html-head ""

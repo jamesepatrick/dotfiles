@@ -930,7 +930,9 @@ Rather than using =org-export-dispatch='s html export, we'll want to use [[https
 
 Just load the require to setup the dependency.
 #+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
-(use-package! ox-tufte)
+(use-package! ox-tufte
+  :interpreter "org"
+  )
 #+end_src
 
 By default the =org-export-dispatch=, includes some basic styling. This causes issues with our HTML. We'll need to turn off these.
