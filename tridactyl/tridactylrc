@@ -27,7 +27,7 @@ unbind <C-b>
 bind h tabprev
 bind l tabnext
 
-set editorcmd "/usr/local/bin/emacsclient"
+set editorcmd "/opt/homebrew/bin/emacsclient"
 
 " Better find.
 unbind <C-f>
