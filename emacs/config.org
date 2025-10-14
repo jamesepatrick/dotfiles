@@ -1,4 +1,5 @@
 #+title: Doom Emacs Configuration
+
 #+AUTHOR: James Patrick
 #+SETUPFILE: ./dist/setup.org
 #+TODO: TRAIL_RUN(t) REFACTOR_NEEDED(r) |
@@ -812,22 +813,6 @@ This uses =doom-variable-pitch-font= as defined in the font section.
         (1.0 . org-warning)
         (0.5 . org-upcoming-deadline)
         (0.0 . org-upcoming-distant-deadline)))
-#+end_src
-*** Prettify Symbols
-There is a few of these built into the =orgmode='s =+pretty= module. Checkboxes are not included so lets include it.
-#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
-(add-hook 'org-mode-hook (lambda ()
-                           "Beautify Org Checkbox Symbol"`
-                           (push '("[ ]" . "☐") prettify-symbols-alist)
-                           (push '("[_]" . "☐") prettify-symbols-alist)
-                           (push '("[X]" . "☑" ) prettify-symbols-alist)
-                           (push '("[-]" . "⊟" ) prettify-symbols-alist)
-                           (prettify-symbols-mode)))
-#+end_src
-
-And when you hover over it, disable it.
-#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
-(setq prettify-symbols-unprettify-at-point 'right-edge)
 #+end_src
 
 ** Drawers

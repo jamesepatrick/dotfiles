@@ -44,16 +44,6 @@
         (0.5 . org-upcoming-deadline)
         (0.0 . org-upcoming-distant-deadline)))
 
-(add-hook 'org-mode-hook (lambda ()
-                           "Beautify Org Checkbox Symbol"`
-                           (push '("[ ]" . "☐") prettify-symbols-alist)
-                           (push '("[_]" . "☐") prettify-symbols-alist)
-                           (push '("[X]" . "☑" ) prettify-symbols-alist)
-                           (push '("[-]" . "⊟" ) prettify-symbols-alist)
-                           (prettify-symbols-mode)))
-
-(setq prettify-symbols-unprettify-at-point 'right-edge)
-
 (setq org-log-into-drawer t)
 
 (setq org-clock-into-drawer t)
