@@ -103,4 +103,4 @@ See https://emacs.stackexchange.com/questions/63517/org-mode-evaluate-diff-code-
 )
 
 (setq org-agenda-files
-      (list org-directory org-directory-work))
+      (list org-directory org-directory-work org-roam-dailies-directory))

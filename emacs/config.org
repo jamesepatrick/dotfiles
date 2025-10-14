@@ -1024,7 +1024,7 @@ We want to add all files in the =org-directory= and =org-directory-work= ([[*=wo
 
 #+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
 (setq org-agenda-files
-      (list org-directory org-directory-work))
+      (list org-directory org-directory-work org-roam-dailies-directory))
 #+end_src
 
 See [[*Calendaring][calendaring]] for related information.
