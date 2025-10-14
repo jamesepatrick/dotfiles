@@ -54,6 +54,12 @@
                             "#+title: %<%Y-%m-%d>\n#+filetags: %<:%Y:%B:daily:>\n\n"))
         ))
 
+(use-package! ob-mermaid
+  :config
+  (setq ob-mermaid-cli-path "/opt/homebrew/bin/mmdc")
+  :interpreter "org"
+  )
+
 (setq org-src-fontify-natively t
       org-src-preserve-indentation t
       org-src-tab-acts-natively t

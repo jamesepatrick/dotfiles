@@ -42,6 +42,16 @@
 
 (load! "+orgmode")
 
+(use-package! mermaid-ts-mode
+  :defer t)
+
+(use-package! mermaid-mode
+  :config
+  (setq mermaid-mmdc-location "/opt/homebrew/bin/mmdc")
+  (setq mermaid-flags "--iconPacks @iconify-json/logos")
+  :mode "\\.mmd\\'"
+  )
+
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
   :bind (:map copilot-completion-map
