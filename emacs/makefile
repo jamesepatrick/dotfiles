@@ -1,9 +1,9 @@
 # -*- mode: makefile-gmake; -*-
 SRC_DIR    := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-EMACSD     := ~/.emacs.d
+EMACSD     := ~/.config/emacs
 
 # Doom Config
-DOOMD      := ~/.doom.d
+DOOMD      := ~/.config/doom
 DOOM_URL   := https://github.com/doomemacs/doomemacs
 
 include ../lib/shared.mk
@@ -31,6 +31,7 @@ setup:
 		$(report) debug "This is a SSH connection. Skipping."
 	else
 		$(report) header "emacs init"
+		mkdir -p ~/.config
 		$(mk_link) $(SRC_DIR) $(DOOMD)
 		$(MAKE) -C $(SRC_DIR) doom_init
 	fi
