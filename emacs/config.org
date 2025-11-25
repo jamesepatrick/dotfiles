@@ -4,7 +4,7 @@
 #+TODO: TRAIL_RUN(t) REFACTOR_NEEDED(r) |
 #+PROPERTY: header-args :mkdirp yes
 
-This Emacs configuration is written style of [[https://en.wikipedia.org/wiki/Literate_programming][Literate Programming]] paradigm & using Hlissner's awesome [[https://github.com/doomemacs/doomemacs][Doom Emacs]] framework. I'll detail the "how" and "why" as I get a better figure out what the hell I'm doing. My current configuration is the result of trying to solidify a collection of outdated work around, snippets cribbed from Stack Overflow, ideas from folks smarter than I am, then held together with string & bubble gum. Please don't hesistate to tell me my elisp-fu sucks or if there's a better way to do anything. If you have any questions please let me know.
+This Emacs configuration is written style of [[https://en.wikipedia.org/wiki/Literate_programming][Literate Programming]] paradigm & using Hlissner's awesome [[https://github.com/doomemacs/doomemacs][Doom Emacs]] framework. I'll detail the "how" and "why" as I get a better figure out what the hell I'm doing. My current configuration is the result of trying to solidify a collection of outdated work around, snippets cribbed from Stack Overflow, ideas from folks smarter than I am, then held together with string & bubble gum. Please don't hesitate to tell me my elisp-fu sucks or if there's a better way to do anything. If you have any questions please let me know.
 
 * Document Structure
 ** Doom Emacs
@@ -25,7 +25,7 @@ or to disable it tangling for a code block set the =:tangle= property in code bl
 #+begin_src orgmode :tangle no
 #+end_src
 
-*** Noweb Reference
+*** No-Web Reference
 This document also uses [[https://orgmode.org/manual/Noweb-Reference-Syntax.html][noweb reference syntax]] to try and DRY this doc out a little. For example
 
 #+begin_example :tangle no
@@ -274,7 +274,7 @@ https://github.com/doomemacs/doomemacs/tree/master/modules/completion
 (vertico +icons)          ; the search engine of the future
 #+end_src
 
-This is an example of something that should have autocomplete.
+This is an example of something that should have auto-complete.
 
 ** UI
 https://github.com/doomemacs/doomemacs/tree/master/modules/ui
@@ -418,7 +418,7 @@ tree-sitter       ; syntax and parsing, sitting in a tree...
 
 NOTE:   =:leader r= is currently being used by roam. See [[*Keybinds][Roam Keybinds]]. This conflicts with the =upload= module. If you wish to use this module in the future you will need to updated one of the keybinds to not conflict.
 
-***  Magit Forge Support
+*** Magit Forge Support
 For use with Github this requires the creation of a Github Token (see [[https://github.com/settings/tokens][here]]). This will need to be appended to your =~/.authinfo.gpg= file using the format below[fn:2].
 
 #+begin_src authinfo :tangle no
@@ -619,7 +619,7 @@ Below is a sample snippet from Rameez Khan's [[https://rameezkhan.me/posts/2020/
                     :desc "Search journal entry" "s" #'org-journal-search)))
    #+end_src
 
-** =whichkey= responsivity
+** =whichkey= response time
 By default which key has a delay of 1 second before it responds. Lets make it a little more responsive by halving that.
 
 #+begin_src emacs-lisp :tangle "config.d/+keybinds.el" :noweb no-export :comments no
@@ -638,7 +638,7 @@ I make liberal use of the =nerd-icons-insert= function. To make it a little more
 #+end_src
 
 * OrgMode
-OrgMode is ridiculous. It's a combination note taking, todolist, jupyter notebook, & calendaring major-mode for Emacs. It is incredibly configurable and extendable, and feature rich to the degree that discovering spreadsheet support after using it for 6 months seems to be a rite of passage. It's wonderful and terrible in a lot of the ways emacs itself is. That said its one of the primary reasons I can't leave emacs.
+OrgMode is ridiculous. It's a combination note taking, todo-list, jupyter notebook, & calendaring major-mode for Emacs. It is incredibly configurable and extendable, and feature rich to the degree that discovering spreadsheet support after using it for 6 months seems to be a rite of passage. It's wonderful and terrible in a lot of the ways emacs itself is. That said its one of the primary reasons I can't leave emacs.
 
 I currently have my files synced via git (see [[*Syncing][Syncing]] for details). But I've yet to find a good mobile clients. I've bounced off [[https://logseq.com/][LogSeq]] multiple times. [[https://xenodium.com][xenodium's]] great [[https://xenodium.com/plain-org-for-ios][PlainOrg]], doesn't vibe well with a roam style setup. I'm tempted to build my own implemention ([[https://xkcd.com/927/][relevant XKCD]]), but given the small child & a growing list household projects, this isn't likely soon.
 
@@ -852,7 +852,7 @@ TODO: I should probably put the "Go to Previous/Next" functions in the minor mod
 ** Calendaring
 I'm presently using Apple's [[https://www.icloud.com/calendar/][iCloud Calendars]] for family calendaring & Google's [[https://workspace.google.com/][Workspace]]. Honestly this is the worst of both worlds. iCloud Calendars has very obfuscated caldav endpoint[fn:5]. Google's calendar is a headache its own way providing only .ics endpoints with a bunch of hoops for private calendars, which are all of them. Getting both to work inside of emacs is a bit of a headache, so let's not do that inside of emacs. Instead we'll hoist this off to [[https://github.com/pimutils/vdirsyncer/][vdirsyncer]]. We'll use [[https://github.com/pimutils/khal/][khal]] as an intermediary, then use [[https://github.com/emacsmirror/khalel][khalel]] for the last mile to Emacs.
 
-So to recap thats is
+So to recap that is
 
 #+begin_src mermaid :exports output :results output :tangle no :file ".resources/cal-dirgram.svg" :background-color transparent
 ---
@@ -945,7 +945,7 @@ You might want to automatically keep track of when a state change occurred and m
 (setq org-clock-into-drawer t)
 #+end_src
 
-* Auto-Mode Alist
+* Auto-Mode =alist=
 Some files we'll need to set the major-mode for manually. Either based on where the file is located, or its extension. To do this add the value to the =auto-mode-alist= and specify the major mode.
 
 #+begin_src emacs-lisp :tangle no
@@ -1014,9 +1014,9 @@ sequenceDiagram
 [[file:.resources/ob-mermaid-test.png]]
 
 * LLM
-I have mixed feelings about LLMs. I do think they are over hyped, not great for the enviroment, likely an bubble threatening crippling economic damage when it pops, & a potential threat to grand founding idea of the internet. Buuuut they do make good search tools, and the agent mode is honestly kind of cool. A good portion of my skills as a developer boil down to knowing what Google for and trying it. This is basically that but automated.
+I have mixed feelings about LLMs. I do think they are over hyped, not great for the environment, likely an bubble threatening crippling economic damage when it pops, & a potential threat to grand founding idea of the internet. Buuuut they do make good search tools, and the agent mode is honestly kind of cool. A good portion of my skills as a developer boil down to knowing what Google for and trying it. This is basically that but automated.
 
-At currently I pretty much exclusivly use GitHub's [[https://github.com/features/copilot][CoPilot]]. But there's plenty of different tools that I use with it. I'm going to make Doom's LLM package.
+At currently I pretty much exclusively use GitHub's [[https://github.com/features/copilot][CoPilot]]. But there's plenty of different tools that I use with it. I'm going to make Doom's LLM package.
 
 Lets just go a head and stub in the elisp header for =packages.el=,
 
@@ -1024,20 +1024,11 @@ Lets just go a head and stub in the elisp header for =packages.el=,
 <<elisp-header>>
 #+end_src
 
-the =config.el=,
+& the =config.el=,
 #+begin_src emacs-lisp :tangle "modules/tools/llm/config.el" :noweb no-export :comments no
 <<elisp-header>>
 #+end_src
 
-& the =keybinds.el=.
-#+begin_src emacs-lisp :tangle "modules/tools/llm/keybinds.el" :noweb no-export :comments no
-<<elisp-header>>
-#+end_src
-
-While we're at it lets also make sure to load the =keybinds.el= from the =config.el=.
-#+begin_src emacs-lisp :tangle "modules/tools/llm/config.el" :noweb no-export :comments no
-;;(after! evil-ex (load! "keybinds")))
-#+end_src
 
 ** Autocomplete++
 The [[https://github.com/copilot-emacs/copilot.el][copilot-emacs/copilot.el]] package just provides the LLM based completion tooling. It works pretty well, but can get in the way. It's like having an overly caffinated junior developer pairing with you. It can more often then not get to where you're going, but may miss the forest for the trees.
@@ -1048,35 +1039,21 @@ First lets setup the dependency.
   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
 #+end_src
 
-By default lets enabled this in programming modes & in org-mode.
+By default lets enabled this in programming modes & in org-mode. Lets also define the default indent level to work around the annoying warning.
 #+begin_src emacs-lisp :tangle "modules/tools/llm/config.el" :noweb no-export :comments no
 (use-package! copilot
   :hook
   (prog-mode . copilot-mode)
   (org-mode . copilot-mode)
-  )
-#+end_src
-
-Some what annoyingly, this package doesn't seem to automatically defer the indentation level & having if it runs into an unknown indentation spec it will produce the following error
-
-#+begin_example
-⛔ Warning (copilot): copilot--infer-indentation-offset found no mode-specific indentation offset.
-#+end_example
-
-We can fix this by defaulting in some values.
-#+name:copilot-emacs/emacs:config
-#+begin_src emacs-lisp :tangle no :noweb no-export
-(after! (copilot)
   (add-to-list 'copilot-indentation-alist '(prog-mode 2))
   (add-to-list 'copilot-indentation-alist '(org-mode 2))
   (add-to-list 'copilot-indentation-alist '(text-mode 2))
-)
+  )
 #+end_src
 
+I originally used =TAB= for completion acceptance, but this was incredibly flaky. The corfu / company would often fight for use. Forcing it using the suggested snippet[fn:8] improved the behavior but broke macro expansion in org-mode. After playing whack-a-mole with issues, I decided the best option was to just go with using =M-n= as the accept key. I've also bound =M-N= to cycle to the next completion.
 
-I orginally used =TAB= for completion acceptance, but this was incredibly flakey. The corfu / company would often fight for use. Forcing it using the suggested snippet[fn:8] improved the behavior but broke macro expansion in org-mode. After playing whack-a-mole with issues, I decided the best option was to just go with using =M-n= as the accept key. I've also bound =M-N= to cycle to the next completion.
-
-#+begin_src emacs-lisp :tangle "modules/tools/llm/keybinds.el" :noweb no-export :comments no
+#+begin_src emacs-lisp :tangle "modules/tools/llm/config.el" :noweb no-export :comments no
 (map! :after copilot
       :map copilot-completion-map
       "M-n" #'copilot-accept-completion
@@ -1085,7 +1062,7 @@ I orginally used =TAB= for completion acceptance, but this was incredibly flakey
 #+end_src
 
 To toggle the minor mode you can use =SPC t C=.
-#+begin_src emacs-lisp :tangle "modules/tools/llm/keybinds.el" :noweb no-export :comments no
+#+begin_src emacs-lisp :tangle "modules/tools/llm/config.el" :noweb no-export :comments no
 (map! :leader
       (:prefix "t"
        :desc "CoPilot" "C" #'copilot-mode
