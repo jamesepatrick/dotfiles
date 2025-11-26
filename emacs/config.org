@@ -804,6 +804,11 @@ Now for the journal section.
 (setq org-roam-dailies-directory (concat org-directory "journals/"))
 #+end_src
 
+Since the ={org-directory}/roam= directory no longer used for Journals or Pages lets relocate the db location as well. I think putting it at the root of the project makes the most sense. Note this file is not versioned for me. Run =org-roam-db-sync= to [[elisp:(org-roam-db-sync)][resync your repo]].
+#+begin_src emacs-lisp :tangle "config.d/+org.el" :noweb no-export :comments no
+(setq org-roam-db-location (concat org-directory ".org-roam.db"))
+#+end_src
+
 *** Dailies Template
 The default template is pretty bare. I'm not going to be adding much, but I do want to expand it a little.
 
