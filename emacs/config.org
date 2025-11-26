@@ -1045,9 +1045,6 @@ By default lets enabled this in programming modes & in org-mode. Lets also defin
   :hook
   (prog-mode . copilot-mode)
   (org-mode . copilot-mode)
-  (add-to-list 'copilot-indentation-alist '(prog-mode 2))
-  (add-to-list 'copilot-indentation-alist '(org-mode 2))
-  (add-to-list 'copilot-indentation-alist '(text-mode 2))
   )
 #+end_src
 
@@ -1060,6 +1057,17 @@ I originally used =TAB= for completion acceptance, but this was incredibly flaky
       "M-N" #'copilot-next-completion
       )
 #+end_src
+
+For some reason copilot doesn't detect the indentation level of the major-mode correctly. Let's set this up for =prog-mode=, =org-mode=, & =text-mode=.
+
+#+begin_src emacs-lisp :tangle "modules/tools/llm/config.el" :noweb no-export :comments no
+(after! copilot
+    (add-to-list 'copilot-indentation-alist '(prog-mode 2))
+    (add-to-list 'copilot-indentation-alist '(org-mode 2))
+    (add-to-list 'copilot-indentation-alist '(text-mode 2))
+  )
+#+end_src
+
 
 To toggle the minor mode you can use =SPC t C=.
 #+begin_src emacs-lisp :tangle "modules/tools/llm/config.el" :noweb no-export :comments no
