@@ -637,6 +637,12 @@ I make liberal use of the =nerd-icons-insert= function. To make it a little more
       )
 #+end_src
 
+Its a little annoying to have to go through the leader key for this all the time. So lets also bind it to ~M-I~ (~SHIFT-META-i~) in insert mode.
+
+#+begin_src emacs-lisp :tangle "config.d/+keybinds.el" :noweb no-export :comments no :results silent
+(map! :i "M-I" #'nerd-icons-insert)
+#+end_src
+
 * OrgMode
 OrgMode is ridiculous. It's a combination note taking, todo-list, jupyter notebook, & calendaring major-mode for Emacs. It is incredibly configurable and extendable, and feature rich to the degree that discovering spreadsheet support after using it for 6 months seems to be a rite of passage. It's wonderful and terrible in a lot of the ways emacs itself is. That said its one of the primary reasons I can't leave emacs.
 
