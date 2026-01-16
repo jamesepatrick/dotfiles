@@ -4,7 +4,7 @@
 #+TODO: TRAIL_RUN(t) REFACTOR_NEEDED(r) |
 #+PROPERTY: header-args :mkdirp yes
 
-This Emacs configuration is written style of [[https://en.wikipedia.org/wiki/Literate_programming][Literate Programming]] paradigm & using Hlissner's awesome [[https://github.com/doomemacs/doomemacs][Doom Emacs]] framework. I'll detail the "how" and "why" as I get a better figure out what the hell I'm doing. My current configuration is the result of trying to solidify a collection of outdated work around, snippets cribbed from Stack Overflow, ideas from folks smarter than I am, then held together with string & bubble gum. Please don't hesitate to tell me my elisp-fu sucks or if there's a better way to do anything. If you have any questions please let me know.
+This Emacs configuration is written in the style of [[https://en.wikipedia.org/wiki/Literate_programming][Literate Programming]] paradigm & using Hlissner's awesome [[https://github.com/doomemacs/doomemacs][Doom Emacs]] framework. I'll detail the "how" and "why" as I get a better figure out what the hell I'm doing. My current configuration is the result of trying to solidify a collection of outdated work around, snippets cribbed from Stack Overflow, ideas from folks smarter than I am, then held together with string & bubble gum. Please don't hesitate to tell me my elisp-fu sucks or if there's a better way to do anything. If you have any questions please let me know.
 
 * Document Structure
 ** Doom Emacs
