@@ -93,7 +93,7 @@ In addition to these there exists the following special directories
 
 *I've also added a non-standard ~$DOOMDIR/config.d~ directory. Any =.el= file added here will get automatically loaded as part of the =config.el= file.* See [[*Loading =$DOOMDIR/config.d=][Loading $DOOMDIR/config.d]] for the implementation.
 
-Currently, this include[fn:4]s
+Currently, this includes[fn:4]
 - =+org.el= :: Additional configuration for Orgmode. Considering this is one of the primary modes I use emacs in there's a fair bit of configuration there.
 - =+keybinds.el= ::  A relatively new and not fully utilized file. The plan is to use this as a centralized location for all custom key binds.
 - =+ui.el= :: General Purpose UI changes.
@@ -183,7 +183,7 @@ We want to load any =.el= file in the =config.d= directory, so lets use the foll
 #+begin_src emacs-lisp :tangle "config.el" :noweb no-export :comments no
 (mapc (lambda (file)
         (load! file nil t))
-      (directory-files (concat doom-user-dir "config.d") t "\\.el\\'"));
+      (directory-files (concat doom-user-dir "config.d") t "\\.el\\'"))
 #+END_SRC
 
 * Doom Modules
@@ -861,7 +861,7 @@ The default doom keybind for capturing a daily entry is ~SPC n r d T~, which is 
 TODO: I should probably put the "Go to Previous/Next" functions in the minor mode for emacs. Maybe ~SPC m m t/T~?
 
 ** Calendaring
-I'm presently using Apple's [[https://www.icloud.com/calendar/][iCloud Calendars]] for family calendaring & Google's [[https://workspace.google.com/][Workspace]]. Honestly this is the worst of both worlds. iCloud Calendars has very obfuscated caldav endpoint[fn:5]. Google's calendar is a headache its own way providing only .ics endpoints with a bunch of hoops for private calendars, which are all of them. Getting both to work inside of emacs is a bit of a headache, so let's not do that inside of emacs. Instead we'll hoist this off to [[https://github.com/pimutils/vdirsyncer/][vdirsyncer]]. We'll use [[https://github.com/pimutils/khal/][khal]] as an intermediary, then use [[https://github.com/emacsmirror/khalel][khalel]] for the last mile to Emacs.
+I'm presently using Apple's [[https://www.icloud.com/calendar/][iCloud Calendars]] for family calendaring & Google's [[https://workspace.google.com/][Workspace]]. Honestly this is the worst of both worlds. iCloud Calendars has a very obfuscated caldav endpoint[fn:5]. Google's calendar is a headache its own way providing only .ics endpoints with a bunch of hoops for private calendars, which are all of them. Getting both to work inside of emacs is a bit of a headache, so let's not do that inside of emacs. Instead we'll hoist this off to [[https://github.com/pimutils/vdirsyncer/][vdirsyncer]]. We'll use [[https://github.com/pimutils/khal/][khal]] as an intermediary, then use [[https://github.com/emacsmirror/khalel][khalel]] for the last mile to Emacs.
 
 So to recap that is
 
