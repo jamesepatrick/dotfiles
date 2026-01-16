@@ -10,9 +10,9 @@ include ../lib/shared.mk
 
 up: setup
 	if [ -e $(EMACSD)/bin/doom ] ; then
-		~/.emacs.d/bin/doom sync \
+		$(EMACSD)/bin/doom sync \
 			; $(report) "doom sync"
-		~/.emacs.d/bin/doom purge \
+		$(EMACSD)/bin/doom purge \
 			; $(report) "doom purge"
 	else
 		$(report) debug "doom not setup, so not updating."
@@ -23,7 +23,6 @@ down:
 	rm -rf $(EMACSD) ; $(report) "deleted $(EMACSD)"
 	$(rm_link) $(DOOMD)
 
-
 setup:
 	if (( ! $$+commands[emacs] )) ; then
 		$(report) debug "Emacs not installed. Skipping install."
@@ -32,6 +31,10 @@ setup:
 	else
 		$(report) header "emacs init"
 		mkdir -p ~/.config
+		if [ ! -f $(DOOMD)/init.el ] ; then
+			echo "(doom! :config literate)" >> $(DOOMD)/init.el \
+				; $(report) "setting up dummy init.el"
+		fi
 		$(mk_link) $(SRC_DIR) $(DOOMD)
 		$(MAKE) -C $(SRC_DIR) doom_init
 	fi
@@ -39,9 +42,9 @@ setup:
 doom_init:
 	if [ ! -e $(EMACSD) ] ; then
 		git clone $(DOOM_URL) $(EMACSD)
-		~/.emacs.d/bin/doom install \
+		$(EMACSD)/bin/doom install \
 			; $(report) "doom install"
-		~/.emacs.d/bin/doom compile \
+		$(EMACSD)/bin/doom compile \
 			; $(report) "doom core compile"
 	else
 		$(report) debug "emacsd already exists. Skipping"

@@ -1,0 +1,1234 @@
+#+title: Doom Emacs Configuration
+
+#+AUTHOR: James Patrick
+#+SETUPFILE: ./dist/setup.org
+#+TODO: TRAIL_RUN(t) REFACTOR_NEEDED(r) |
+
+I'll fill out the how and why of this all as I figure out what the hell I'm doing. My current Emacs Configuration is a mess of copy and pasted snippet loosely grouped together. There's a fair number of work around, to transient configuration issues that now no longer exist, and more of stuff cribbed off StackOverflow & held together with string & bubble gum. While not yet calling Configuration Bankrupt's, I am going to try to see if I can restructure this technical debt.
+
+
+This Emacs configuration is written using the [[https://en.wikipedia.org/wiki/Literate_programming][Literate Programming]] paradigm (well sort of) proposed by [[https://en.wikipedia.org/wiki/Donald_Knuth][Donald Knuth]] in 1984, and uses Hlissner's awesome [[https://github.com/doomemacs/doomemacs][Doom Emacs]] configuration framework. While I like Literate Programming, literate configuration can be a mixed bag. Literate Programming produces more prose than code. Discoverability & readability can be drowned out under the prose about the current thoughts, pros & cons, backstory, deciding thoughts, & moral pondering. While this verbosity[fn:4] aids documentation and understanding, its often at the cost of readability. As a compromise I'm going to version both to the verbose =config.org= file and all the produced configuration files; this will allow us to =git blame= both this file and the generated files.
+
+* Document Structure
+** Doom Emacs
+I'm utilizing Hlissner's [[https://github.com/doomemacs/doomemacs][Doom Emacs]] frameworks. Doom Emac's configuration is divided into 150 modules, & fair number of convenience functions. Rather than detailing stuff about I'll say to go read [[https://github.com/doomemacs/doomemacs/blob/master/docs/faq.org][FAQs]] & [[https://github.com/doomemacs/doomemacs/blob/master/docs/index.org][Index]].
+
+Configuration is located in the ~$DOOMDIR~ directory; this can be located either[fn:3]  at =~/.doom.d= or =$XDG_CONFIG_HOME/doom=.
+** Tangle
+This org-mode document works by using [[https://orgmode.org/manual/Extracting-Source-Code.html][tangles]]. By default, Doom's literate config mode adds any ~#+begin_src~ blocks into the =config.el= file[fn:1]. If you want to tangle to a specific file you pass in a file name.
+
+#+begin_src org :tangle no
+#+begin_src emacs-lisp :tangle "example.el"
+#+end_src
+
+or to disable it tangling for a code block set the =:tangle= property in code block header to =no=.
+
+#+begin_src org :tangle no
+#+begin_src orgmode :tangle no
+#+end_src
+
+*** Noweb Reference
+This document uses [[https://orgmode.org/manual/Noweb-Reference-Syntax.html][noweb reference syntax]]. This allows us to extract bits of configuration into named code blocks, which can be interpolated into another code block's variable. For example:
+
+#+begin_example :tangle no
+#+NAME: initialization
+#+BEGIN_SRC emacs-lisp
+  (setq sentence "Never a foot too far, even.")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :noweb yes
+  <<initialization>>
+  (reverse sentence)
+#+END_SRC
+#+end_example
+
+will produce
+
+#+begin_example
+#+BEGIN_SRC emacs-lisp :noweb yes
+  (setq sentence "Never a foot too far, even.")
+  (reverse sentence)
+#+END_SRC
+#+end_example
+
+NOTE: unless you explicitly turn off the named code block will be tangled into =config.el=. Use the no tangle option if you want to disable this.
+
+** Files tree
+There's a fair number of files located in ~$DOOMDIR~.  Some are configuration, some are additional tooling not use directly by emacs.
+
+#+begin_src bash :tangle no :exports result :results output verbatim
+tree $DOOMDIR -L 2
+#+end_src
+
+#+RESULTS:
+#+begin_example
+.
+├── +keybinds.el
+├── +orgmode.el
+├── config.el
+├── config.html
+├── config.org
+├── dist
+│   ├── bundle.js
+│   ├── code.css
+│   ├── custom.css
+│   ├── setup.org
+│   └── tufte.css
+├── init.el
+├── makefile
+├── packages.el
+└── snippets
+    └── org-mode
+
+4 directories, 13 files
+#+end_example
+
+*** Emacs Configuration Files
+Doom will automatically load the following files.
+
++ =init.el= :: Enabled Doom Modules
++ =package.el= :: Packages to fetch from MELPA, GitHub, etc.
++ =config.el= :: General Emacs configuration
+
+Any additional files should follow the pattern of =+name.el= and should be scoped to that individual purpose.
+
+This should be loaded by the =config.el= file by using the  =load!= macro[fn:7] e.g.
+
+#+begin_src emacs-lisp :tangle no
+(load! "+name")
+#+end_src
+
+Currently, this includes
+
+- =+orgmode.el= :: Additional configuration for Orgmode. Considering this is one of the primary modes I use emacs in there's a fair bit of configuration there.
+- =+keybinds.el= ::  A relatively new and not fully utilized file. The plan is to use this as a centralized location for all custom key binds.
+
+*** Other files
+There are several other files here not directly used by emacs but are related to it.
+
+- =makefile= :: Install script using make[fn:6].
+- =dist/*= :: These are files used by the output of [[https://github.com/ox-tufte/ox-tufte][ox-tufte]].[fn:5]
+- =config.html= :: This org file exported from [[https://github.com/ox-tufte/ox-tufte][ox-tufte]]. This is not versioned.
+- =snippets/[major mode]/*= :: These are [[https://github.com/joaotavora/yasnippet][YASnippets]]. These are manage by this document. See [[*Snippets][Snippets]] for more.
+
+Everything else should be emacs configuration.
+**  Emacs file prefixing
+*** Lexical Bindings
+There [[https://nullprogram.com/blog/2016/12/22/][minor but non-zero start time benefits]] for using Lexical Bindings comments. All files created should start with
+
+#+name:lexical-binding
+#+BEGIN_SRC emacs-lisp
+;;; -*- lexical-binding: t; -*-
+#+END_SRC
+
+*** Warn user not to modify =*.el= files directly.
+As mentioned above, we are versioning the generated emacs lisp configuration. We shouldn't modify these files as they'll be clobbered anytime the org-tangle is run. Let's include a warning to this effect.
+
+#+name:modification-warning
+#+begin_src emacs-lisp
+;;; This file is generated via tangles from the config.org file. Do not modify this file.
+;;; Any modifications here will be clobbered and versioned over. Seriously just don't.
+#+end_src
+
+*** Applying to all files
+We need to apply this to all the following files.
+#+begin_src bash :tangle no :exports result :results output verbatim
+find ~/.doom.d/* -iname '*.el' | sed "s/.*\///"
+#+end_src
+
+#+RESULTS:
+: +keybinds.el
+: +orgmode.el
+: config.el
+: init.el
+: packages.el
+
+ Since we've used a named these blocks we can use [[*Noweb Reference][Noweb Reference]] for all the files.
+
+=+keybinds.el=
+#+begin_src emacs-lisp :tangle "+keybinds.el" :noweb no-export :comments no
+<<lexical-binding>>
+<<modification-warning>>
+#+END_SRC
+
+=+orgmode.el=
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+<<lexical-binding>>
+<<modification-warning>>
+#+END_SRC
+
+=config.el=
+#+begin_src emacs-lisp :tangle "config.el" :noweb no-export :comments no
+<<lexical-binding>>
+<<modification-warning>>
+#+END_SRC
+
+=init.el=
+#+begin_src emacs-lisp :tangle "init.el" :noweb no-export :comments no
+<<lexical-binding>>
+<<modification-warning>>
+#+END_SRC
+
+=packages.el=
+#+begin_src emacs-lisp :tangle "packages.el" :noweb no-export :comments no
+<<lexical-binding>>
+<<modification-warning>>
+#+END_SRC
+
+
+
+* Doom Modules
+The configuration is below is pulled from the template =init.example.el= provided by doom. This one is based off commit [[https://github.com/doomemacs/doomemacs/blob/e6c755305358412a71a990fc2cf592c629edde1e/static/init.example.el][e6c7553]].
+
+#+name: init.el
+#+attr_html: :collapsed t
+#+begin_src emacs-lisp :tangle "init.el" :noweb no-export :comments no
+;; This file controls what Doom modules are enabled and what order they load
+;; in. Remember to run 'doom sync' after modifying it!
+
+;; NOTE Press 'SPC h d h' (or 'C-h d h' for non-vim users) to access Doom's
+;;      documentation. There you'll find a link to Doom's Module Index where all
+;;      of our modules are listed, including what flags they support.
+
+;; NOTE Move your cursor over a module's name (or its flags) and press 'K' (or
+;;      'C-c c k' for non-vim users) to view its documentation. This works on
+;;      flags as well (those symbols that start with a plus).
+;;
+;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
+;;      directory (for easy access to its source code).
+
+(doom! :completion
+       <<doom-completion>>
+
+       :ui
+       <<doom-ui>>
+
+       :editor
+       <<doom-editor>>
+
+       :emacs
+       <<doom-emacs>>
+
+       :term
+       <<doom-term>>
+
+       :checkers
+       <<doom-checker>>
+
+       :tools
+       <<doom-tools>>
+
+       :os
+       (:if (featurep :system 'macos) macos)
+       ;;tty               ; improve the terminal Emacs experience
+
+       :lang
+       <<doom-lang>>
+
+       :email
+       <<doom-email>>
+
+       :app
+       <<doom-app>>
+
+       :config
+       <<doom-config>>
+       )
+#+end_src
+
+The code of these can be found in the [[https://github.com/doomemacs/doomemacs/tree/master/modules][modeules directory]], the read me for each module will list any additional configuration options.
+
+** Completion
+https://github.com/doomemacs/doomemacs/tree/master/modules/completion
+
+#+name:doom-completion
+#+begin_src emacs-lisp :tangle no
+;; (company           ; the ultimate code completion backend
+;;  +childframe       ; not quite a window & not quite a frame
+;; ; +tng              ; Use tab instead of ctrl+space
+;;  )
+(corfu
+ +icons
+ +orderless
+ )
+;;helm              ; the *other* search engine for love and lifes
+;;ido               ; the other *other* search engine...
+;;ivy               ; a search engine for love and life
+(vertico           ; the search engine of the future
+ +icons            ; make a little prettier
+)
+#+end_src
+
+=+childframe= exists for both company & vertico, but looks a little weird with Vertico. We have for gone it for the time being.
+
+** UI
+https://github.com/doomemacs/doomemacs/tree/master/modules/ui
+
+#+name:doom-ui
+#+begin_src emacs-lisp :tangle no
+;;deft              ; notational velocity for Emacs
+doom              ; what makes DOOM look the way it does
+doom-dashboard    ; a nifty splash screen for Emacs
+doom-quit         ; DOOM quit-message prompts when you quit Emacs
+(emoji +unicode)  ; 🙂
+hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
+;;indent-guides     ; highlighted indent columns
+;;ligatures         ; ligatures and symbols to make your code pretty again
+;;minimap           ; show a map of the code on the side
+modeline          ; snazzy, Atom-inspired modeline, plus API
+nav-flash         ; blink cursor line after big motions
+neotree           ; a project drawer, like NERDTree for vim
+ophints           ; highlight the region an operation acts on
+(popup +defaults)   ; tame sudden yet inevitable temporary windows
+;;smooth-scroll     ; So smooth you won't believe it's not butter
+;;tabs              ; a tab bar for Emacs
+(treemacs          ; a project drawer, like neotree but cooler
+ +lsp)
+;;unicode           ; extended unicode support for various languages
+(vc-gutter +pretty) ; vcs diff in the fringe
+vi-tilde-fringe   ; fringe tildes to mark beyond EOB
+(window-select    ; visually switch windows
+ +numbers)        ; c-w N
+workspaces        ; tab emulation, persistence & separate workspaces
+zen               ; distraction-free coding or writing
+#+end_src
+
+*** Fancy Welcome Image
+Rather than the boring ascii doom logo. Lets some the one off the box art. This is enabled by the =doom-dashboard= module.
+
+#+CAPTION:Doom Welcome Icon
+[[./.resources/doom.png]]
+
+#+begin_src emacs-lisp :tangle "config.el" :noweb no-export :comments no
+
+(setq fancy-splash-image (concat doom-user-dir "./.resources/doom.png"))
+#+end_src
+** Editor
+https://github.com/doomemacs/doomemacs/tree/master/modules/editor
+
+#+name:doom-editor
+#+begin_src emacs-lisp :tangle no
+(evil +everywhere); come to the dark side, we have cookies
+file-templates    ; auto-snippets for empty files
+fold              ; (nigh) universal code folding
+(format +onsave)  ; automated prettiness
+;;god               ; run Emacs commands without modifier keys
+;;lispy             ; vim for lisp, for people who don't like vim
+;;multiple-cursors  ; editing in many places at once
+;;objed             ; text object editing for the innocent
+;;parinfer          ; turn lisp into python, sort of
+rotate-text       ; cycle region at point between text candidates
+snippets          ; my elves. They type so I don't have to
+;;word-wrap         ; soft wrapping with language-aware indent
+#+end_src
+
+*** Custom Formatter
+Doom uses [[https://github.com/lassik/emacs-format-all-the-code][emacs-format-all-the-code]] for its formatting. It's a great package, but I use different formatters for a couple language. At this time I'm only going to update =sql-mode= to use [[https://github.com/darold/pgFormatter][pgformatter]]. It's supported, but instead used by default.
+
+#+begin_src emacs-lisp
+(setq-hook! 'sql-mode-hook +format-with 'pgformatter)
+#+end_src
+
+
+** Emacs
+https://github.com/doomemacs/doomemacs/tree/master/modules/emacs
+#+name:doom-emacs
+#+begin_src emacs-lisp :tangle no
+dired             ; making dired pretty [functional]
+electric          ; smarter, keyword-based electric-indent
+;;eww               ; the internet is gross
+(ibuffer +icons)  ; interactive buffer management
+(undo +tree)             ; persistent, smarter undo for your inevitable mistakes
+vc                ; version-control and Emacs, sitting in a tree
+#+end_src
+
+** Term
+https://github.com/doomemacs/doomemacs/tree/master/modules/term
+
+#+name:doom-term
+#+begin_src emacs-lisp :tangle no
+;;eshell            ; the elisp shell that works everywhere
+;;shell             ; simple shell REPL for Emacs
+;;term              ; basic terminal emulator for Emacs
+vterm             ; the best terminal emulation in Emacs
+#+end_src
+
+Vterm is great. It does require some additional configuration to work properly. See [[https://github.com/doomemacs/doomemacs/tree/master/modules/term/vterm][relavant doc]] for more.
+
+** Checker
+https://github.com/doomemacs/doomemacs/tree/master/modules/checker
+
+#+name:doom-checker
+#+begin_src emacs-lisp :tangle no
+(syntax +childframe              ; tasing you for every semicolon you forget
+  +icons
+  +flymake)
+(spell            ; tasing you for misspelling mispelling
+ +aspell
+ +everywhere)
+grammar           ; tasing grammar mistake every you make
+#+end_src
+
+*** Custom Dictionary
+#+begin_src emacs-lisp :tangle "config.el" :noweb no-export :comments no
+(setq ispell-dictionary "en"
+      ispell-personal-dictionary (concat org-directory ".ispell.en.pws"))
+#+end_src
+** Tools
+https://github.com/doomemacs/doomemacs/tree/master/modules/tools
+
+#+name:doom-tools
+#+begin_src emacs-lisp :tangle no
+ansible
+;;biblio            ; Writes a PhD for you (citation needed)
+;;collab            ; buffers with friends
+(debugger +lsp)         ; FIXME stepping through code, to help you add bugs
+;;direnv
+;;docker
+editorconfig      ; let someone else argue about tabs vs spaces
+;;ein               ; tame Jupyter notebooks with emacs
+(eval +overlay)     ; run code, run (also, repls)
+(lookup              ; navigate your code and its documentation
+ +dictionary
+ +docset
+ +offline)
+;;llm                 ; when I said you needed friends, I didn't mean...
+(lsp +peek)              ; M-x vscode
+(magit +forge)      ; a git porcelain for Emacs
+make              ; run make tasks from Emacs
+;;pass              ; password manager for nerds
+;;pdf               ; pdf enhancements
+(terraform         ; infrastructure as code
+ +lsp)
+;;tmux              ; an API for interacting with tmux
+tree-sitter       ; syntax and parsing, sitting in a tree...
+;;upload            ; map local to remote projects via ssh/ftp
+#+end_src
+
+NOTE:   =:leader r= is currently being used by roam. See [[*Keybinds][Roam Keybinds]]. This conflicts with the =upload= module. If you wish to use this module in the future you will need to updated one of the keybinds to not conflict.
+
+***  Magit Forge Support
+For use with Github this requires the creation of a Github Token (see [[https://github.com/settings/tokens][here]]). This will need to be appended to your =~/.authinfo.gpg= file using the format below[fn:2].
+
+#+begin_src authinfo :tangle no
+machine api.github.com login yourlogin^code-review password MYTOKENGOESHERE
+#+end_src
+
+For more on Forge see [[https://magit.vc/manual/forge.html][Magit's Forge documentation]].
+**** Commit Mode
+There's no local mode for commit-mode, so lets add some basics
+
+#+begin_src emacs-lisp :tangle "+keybinds.el" :noweb no-export :comments no
+(map! :map git-commit-mode-map
+      :localleader
+      "n" #'git-commit-next-message
+      "p" #'git-commit-prev-message
+      )
+#+End_src
+
+** Language
+https://github.com/doomemacs/doomemacs/tree/master/modules/lang
+
+#+name:doom-lang
+#+begin_src emacs-lisp :tangle no
+;;agda              ; types of types of types of types...
+;;beancount         ; mind the GAAP
+;;(cc +lsp)         ; C > C++ == 1
+;;clojure           ; java with a lisp
+;;common-lisp       ; if you've seen one lisp, you've seen them all
+;;coq               ; proofs-as-programs
+;;crystal           ; ruby at the speed of c
+;;csharp            ; unity, .NET, and mono shenanigans
+data              ; config/data formats
+;;(dart +flutter)   ; paint ui and not much else
+;;dhall
+;;elixir            ; erlang done right
+;;elm               ; care for a cup of TEA?
+emacs-lisp        ; drown in parentheses
+;;erlang            ; an elegant language for a more civilized age
+;;ess               ; emacs speaks statistics
+;;factor
+;;faust             ; dsp, but you get to keep your soul
+;;fortran           ; in FORTRAN, GOD is REAL (unless declared INTEGER)
+;;fsharp            ; ML stands for Microsoft's Language
+;;fstar             ; (dependent) types and (monadic) effects and Z3
+;;gdscript          ; the language you waited for
+(go                 ; the hipster dialect
+ +lsp
+ +tree-sitter)
+;;(graphql +lsp)    ; Give queries a REST
+;;(haskell +lsp)    ; a language that's lazier than I am
+;;hy                ; readability of scheme w/ speed of python
+;;idris             ; a language you can depend on
+(json              ; At least it ain't XML
+ +lsp
+ +tree-sitter)
+;;janet             ; Fun fact: Janet is me!
+;;(java +lsp)       ; the poster child for carpal tunnel syndrome
+(javascript        ; all(hope(abandon(ye(who(enter(here))))))
+ +lsp
+ +tree-sitter)
+;;julia             ; a better, faster MATLAB
+;;kotlin            ; a better, slicker Java(Script)
+;;latex             ; writing papers in Emacs has never been so fun
+;;lean              ; for folks with too much to prove
+;;ledger            ; be audit you can be
+;;lua               ; one-based indices? one-based indices
+markdown          ; writing docs for people to ignore
+;;nim               ; python + lisp at the speed of c
+(nix               ; I hereby declare "nix geht mehr!"
+ +tree-sitter)
+;;ocaml             ; an objective camel
+(org               ; organize your plain life in plain text
+ +dragndrop
+ +journal
+ +pandoc
+ +pomodoro
+ +pretty
+ +roam2)
+;;php               ; perl's insecure younger brother
+;;plantuml          ; diagrams for confusing people more
+;;graphviz          ; diagrams for confusing yourself even more
+;;purescript        ; javascript, but functional
+(python            ; beautiful is better than ugly
+ +lsp
+ +poetry
+ +pyright
+ +tree-sitter)
+;;qt                ; the 'cutest' gui framework ever
+;;racket            ; a DSL for DSLs
+;;raku              ; the artist formerly known as perl6
+;;rest              ; Emacs as a REST client
+;;rst               ; ReST in peace
+(ruby ;;+rails     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
+ +rbenv
+ +lsp
+ +tree-sitting)
+;;(rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
+;;scala             ; java, but good
+;;(scheme +guile)   ; a fully conniving family of lisps
+(sh                ; she sells {ba,z,fi}sh shells on the C xor
+ +lsp
+ +tree-sitter)
+;;sml
+;;solidity          ; do you need a blockchain? No.
+;;swift             ; who asked for emoji variables?
+;;terra             ; Earth and Moon in alignment for performance.
+(web               ; the tubes
+ +lsp
+ +tree-sitter)
+(yaml +lsp)              ; JSON, but readable
+;;zig               ; C, but simpler
+#+end_src
+
+** Emails
+https://github.com/doomemacs/doomemacs/tree/master/modules/email
+
+#+name:doom-email
+#+begin_src emacs-lisp :tangle no
+(mu4e +org)
+;;notmuch
+;;(wanderlust +gmail)
+#+end_src
+
+** App
+https://github.com/doomemacs/doomemacs/tree/master/modules/app
+
+#+name:doom-app
+#+begin_src emacs-lisp :tangle no
+calendar
+;;emms
+;;everywhere        ; *leave* Emacs!? You must be joking
+;;irc               ; how neckbeards socialize
+;;(rss +org)        ; emacs as an RSS reader
+#+end_src
+
+** Config
+https://github.com/doomemacs/doomemacs/tree/master/modules/config
+
+#+name:doom-config
+#+begin_src emacs-lisp :tangle no
+literate
+(default +bindings +smartparens)
+#+end_src
+
+
+* General UI Tweaks
+** Window Title bar
+The title bar display string will display =♢= if there exist unsaved buffer modifications & =♦= otherwise.
+
+#+begin_src emacs-lisp :tangle "config.el" :noweb no-export :comments no
+(setq doom-fallback-buffer-name "Doom"
+      +doom-dashboard-name "Doom Dashboard")
+
+(setq frame-title-format
+      '(""
+        (:eval
+         (if (s-contains-p org-roam-directory (or buffer-file-name ""))
+             (replace-regexp-in-string
+              ".*/[0-9]*-?" "☰ "
+              (subst-char-in-string ?_ ?  buffer-file-name))
+           "%b"))
+        (:eval
+         (let ((project-name (projectile-project-name)))
+           (unless (string= "-" project-name)
+             (format (if (buffer-modified-p)  " ♢ %s" " ♦ %s") project-name))))))
+#+end_src
+
+** Fonts
+I use the [[https://www.nerdfonts.com/][nerdfont]]'s [[https://github.com/i-tu/Hasklig][Hasklig]] for my monospaced font & Huerta Tipografica's [[https://www.huertatipografica.com/en/fonts/alegreya-ht-pro][ Alegreya]] serif font.
+
+#+begin_src emacs-lisp :tangle "config.el" :noweb no-export :comments no
+(setq doom-font (font-spec :family "Hasklig" :size 14 :height 1)
+      doom-variable-pitch-font (font-spec :family "Alegreya" :height 1.3)
+      doom-big-font (font-spec :family "Hasklig" :size 18))
+#+end_src
+
+* Keys
+Key binds should be centralized in =$DOOMDIR/+keybinds.el=. This is loaded from =$DOOMDIR/config.el= file via
+
+#+begin_src emacs-lisp :tangle "config.el" :noweb no-export :comments no
+(load! "+keybinds")
+#+end_src
+
+
+Doom comes with some good key bind macros (see [[https://github.com/doomemacs/doomemacs/blob/master/docs/faq.org#bind-my-own-keys-or-change-existing-ones][here]] for why).  Documentation for this can be found [[https://github.com/doomemacs/doomemacs/blob/master/docs/faq.org#bind-my-own-keys-or-change-existing-ones][here]], but in broad strokes:
+
+1. Start with a =map!= macro.  You can use
+2. When possible use =:when= to limit scope.
+3.  Use =:prefix= and =:prefix-map= where possible.
+4. Always use =:desc= to describe what is being done.
+
+Below is a sample snippet from Rameez Khan's [[https://rameezkhan.me/posts/2020/2020-07-03--adding-keybindings-to-doom-emacs/][blog]] (first hit on "doom emacs key bind" using [[https://duckduckgo.com/][DDG]]):
+   #+begin_src emacs-lisp :tangle no
+(map! :leader
+      (:prefix-map ("a" . "applications")
+                   (:prefix ("j" . "journal")
+                    :desc "New journal entry" "j" #'org-journal-new-entry
+                    :desc "Search journal entry" "s" #'org-journal-search)))
+   #+end_src
+
+Note:  Key binds should be defined with in the context that they are being used, not here
+
+** Local Leader
+Lets set the local leader to =,=. We may want to remap this to =;= later. Both of these seem to have issues with potential key conflicts with evil-snipe. This seems to primarily exists in regard to org-mode.  GitHub issue can be found [[https://github.com/doomemacs/doomemacs/issues/4242][here]].
+
+#+begin_src emacs-lisp :tangle "+keybinds.el" :noweb no-export :comments no
+(setq doom-localleader-key ",")
+#+end_src
+
+** Speedup =whichkey= response
+=whichkey= is slow to respond, lets make it a bit faster.
+
+#+begin_src emacs-lisp :tangle "config.el" :noweb no-export :comments no
+(setq which-key-idle-delay 0.1)
+#+end_src
+
+** Icons
+I make liberal use of the =nerd-icons-insert= function. To make it a little more acceptable I'm binding it to ~SPC i i~.
+
+#+begin_src emacs-lisp :tangle "+keybinds.el" :noweb no-export :comments no
+(map! :leader
+      (:prefix "i"
+       :desc "icons" "i" #'nerd-icons-insert
+       )
+      )
+#+end_src
+
+* Auto-Mode Alist
+Some files we'll need to set the major-mode for manually. Either based on where the file is located, or its extension. To do this add the value to the =auto-mode-alist= and specify the major mode.
+
+#+begin_src emacs-lisp :tangle no
+(add-to-list 'auto-mode-alist '("/path/to/file/.*\\.file" . markdown-mode))
+#+end_src
+** Tridactyl
+I am currently using Firefox with [[https://github.com/tridactyl/tridactyl][Tridactyl]].  The =editorcmd= creates a temporary file & opens it with the editor of choice.  The domain is included in the temporary file name, but it's a fair assumption that it will markdown. We can use this to set the syntax of the file in question. This likely just be markdown.
+#+begin_src emacs-lisp :tangle "config.el" :noweb no-export :comments no
+(add-to-list 'auto-mode-alist '("/\\(tmp\\|private/var\\)/.*/tmp_.*\\.txt" . markdown-mode))
+#+end_src
+* Orgmode
+This file will be needed for emacs batch automation, where it's not reasonable to start up my entire working env. This file can be located at =$DOOMDIR/+orgmode.el=.
+
+#+begin_src emacs-lisp :tangle "config.el" :noweb no-export :comments no
+(load! "+orgmode")
+#+end_src
+
+This file may get consumed via emacs batch scripting, so we need to make sure the orgmode is actually loaded.
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(require 'org)
+#+end_src
+** Directories
+Notes are stored in the  =$HOME/org= directory, and are synced to GitHub. See  [[*Syncing][Syncing]] for more on this.
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(custom-set-variables '(org-directory "~/org/"))
+#+end_src
+
+I've tried to organize things based on purpose & this will likely change in the future. The current directory looks like this
+
+#+begin_example :tangle no
+~/org
+├── .archive
+├── .attach
+├── README.org
+├── _logseq
+├── journals
+├── projects
+├── pages
+└── work
+#+end_example
+
+*** =.archive=
+Where old files go. See =org-archive-subtree= for more.
+
+*** =.attach=
+This is things that aren't orgmode files, but should be included in an orgmode file. Tangled scripts, images, etc.
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(setq org-download-image-dir (concat org-directory ".attach/"))
+#+end_src
+*** =Projects=
+I keep a =todo.org= at the root of each project. These are symlinked into the Projects directory. Nextcloud does not sync symlinked documents.
+
+*** =roam=
+[[https://www.orgroam.com/][org-roam]] is a great Zettelkasten toolkit with back link graphing. I'll try to store as much of my written notes in this format.
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(setq org-roam-directory (concat org-directory "pages"))
+#+end_src
+
+*** =journals=
+Dailies. This is also handled by Org-roam.
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(setq org-roam-dailies-directory (concat org-directory "journals/"))
+#+end_src
+
+*** =work=
+For record keeping I want to keep work related project notes in the work directory.
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(defvar org-directory-work (concat org-directory "work/") "Location for work subdirectory.")
+#+end_src
+
+The primary work horse here is the =work/todo.org= file. This keep track of hours (for organization labor capitalization) and my rolling todo list. The todo list is broken into 4 headers that serves as ticking tracking and items get refiled from section to section.
+
+- Current :: Items currently getting worked. I try to keep a WIP count of 1, that doesn't often happen by I try.
+- Inbox :: Items to get to next
+- Follow Up ::  Catchall for things I can do quiet yet. This includes stuff that has been delegated to others or blocked due to external factors. Includes waiting for subject expert to come back from break, Supervising projects that require periodic check ins, and time sensitive deployments.
+- Wait :: Honestly no clue why this is here. This appears to be a duplicate to "Follow Up"?
+
+I have a ~org-capture~ to add things to the "Inbox" header.  A date is also added. This theorically could just be tracked via the git commit ([[*Syncing][see syncing]]), but the git churn from refiling makes this a bit of a pain.
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(defvar-local +org-capture-work-todo-file
+    (expand-file-name "todo.org" org-directory-work))
+(add-to-list 'org-capture-templates
+             '("w" "Work Todo" entry
+               (file+headline +org-capture-work-todo-file "Inbox")
+               "* [_] %i%?\n%a -  %u" :prepend t))
+#+end_src
+
+To further reduce the friction of adding tasks there is a raycast script to add these items.
+
+#+begin_src bash :tangle no :noweb no-export :comments no
+#!/bin/bash
+
+# Required parameters:
+# @raycast.schemaVersion 1
+# @raycast.title Org Capture
+# @raycast.mode silent
+
+# Optional parameters:
+# @raycast.icon 🤖
+#
+# @raycast.argument1 { "type": "text", "placeholder": "Message" }
+
+# Documentation:
+# @raycast.author jpatrick
+# @raycast.authorURL https://raycast.com/jpatrick
+#
+emacsclient -a "" -e "(+org-capture/open-frame \"$1\" \"w\")"
+#+end_src
+
+This will pop up a new =org-capture= window with the title provided.
+
+** Syncing
+Syncing of the  ~org-directory~ is done via git with remote of https://github.com/jamesepatrick/notes. Changes are auto-committed & pushed using [[https://github.com/ryuslash/git-auto-commit-mode][git-auto-commit-mode]] in  Emacs & [[https://workingcopy.app/][Working Copy]] with iOS Shortcuts on iOS.
+
+Grab the package from MELPA
+
+#+begin_src emacs-lisp :tangle "packages.el" :noweb no-export :comments no :results output silent
+(package! git-auto-commit-mode)
+#+end_src
+
+For configuring it we'll want the following settings:
+- =gac-automatically-push-p= :: Automatically push new changes.
+- =gac-automatically-add-new-files-p=  :: Automatically add new files.
+
+Additionally, we'll also want to add a big of additional logic so that we will automatically pull changes as well. It may be worth setting up a crontab to automate the pull in the future.
+
+This snippet below is from siatwe's comment [[https://github.com/ryuslash/git-auto-commit-mode/pull/40#issuecomment-1772237807][here]].
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(use-package! git-auto-commit-mode
+  :config
+  (setq-default gac-automatically-push-p t)
+  (setq-default gac-automatically-add-new-files-p t)
+
+  (defun gac-pull-before-push (&rest _args)
+    (let ((current-file (buffer-file-name)))
+      (shell-command "git pull")
+      (when current-file
+        (with-current-buffer (find-buffer-visiting current-file)
+          (revert-buffer t t t)))))
+  (advice-add 'gac-push :before #'gac-pull-before-push))
+#+end_src
+
+Configuring should be done at the at the [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables][per directory level]].  The following snippet should be placed at =$org-directory/.dir-locals.el=.
+
+#+begin_src emacs-lisp :tangle no :comments no :results output silent
+((nil . ((eval git-auto-commit-mode 1)
+         (gac-automatically-push-p t)
+         (gac-automatically-add-new-files-p t))))
+#+end_src
+
+** A Prettier Orgmode
+*** Use a serif variable font
+This uses =doom-variable-pitch-font= as defined in the font section.
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(add-hook! 'org-mode-hook #'mixed-pitch-mode)
+#+end_src
+
+*** Pretty mode
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(add-hook! 'org-mode-hook #'+org-pretty-mode)
+#+end_src
+
+*** Agenda faces
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(setq org-agenda-deadline-faces
+      '((1.001 . error)
+        (1.0 . org-warning)
+        (0.5 . org-upcoming-deadline)
+        (0.0 . org-upcoming-distant-deadline)))
+#+end_src
+
+** Drawers
+https://orgmode.org/manual/Drawers.html
+***   State Change Log
+Logs updates can bleed into the notes. Sticking them in a drawer works as a better escape then indentations.
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(setq org-log-into-drawer t)
+#+end_src
+***   Clock drawers
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(setq org-clock-into-drawer t)
+#+end_src
+** Roam
+I use =org-roam=  v2 for most of my note taking. TODO expand this section.
+*** Dailies Templates
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no :results output silent
+(setq org-roam-dailies-capture-templates
+      '(("d" "default" entry "*  %T %?"
+         :target (file+head "%<%Y-%m-%d>.org"
+                            "#+title: %<%Y-%m-%d>\n#+filetags: %<:%Y:%B:daily:>\n\n"))
+        ))
+#+end_src
+
+*** Keybinds
+The standard keybind for getting to Roam's daily capture is pretty long.  To capture a Log entry I have to type =SPC n r d T l=. I want to capture as many logs and goals as possible, so lets shorten this up some.
+#+begin_src emacs-lisp :tangle "+keybinds.el" :noweb no-export :comments no
+(map! :leader
+      (:when (modulep! :lang org +roam2)
+        (:prefix-map ("r" . "roam")
+         :desc "Find node"              "/"    #'org-roam-node-find
+         :desc "Capture to node"        "n"    #'org-roam-capture
+         :desc "Capture Today"          "c"    #'org-roam-dailies-capture-today
+         :desc "Goto Today"             "t"    #'org-roam-dailies-goto-today
+         )
+        )
+      )
+#+end_src
+
+=:leader r= is used by =:tools upload= for "remote",  but since I'm not using this lets just not care about that.
+** Mermaid
+ [[https://mermaid.js.org/][MermaidJS]]  is a diagramming and charting tool similar to Dot/Graphviz, but significantly prettier with less boilerplate. We'll likely only ever want to modify it in the context of  =org-mode= so we'll want [[https://github.com/arnm/ob-mermaid][ob-mermaid]].
+
+Add the following the =packages.el=
+#+begin_src emacs-lisp :tangle "packages.el" :noweb no-export :comments no :results output silent
+(package! ob-mermaid)
+#+end_src
+** Babel stuff
+Babel execute can be tweaked per the syntax see orgmode docs [[https://orgmode.org/manual/Evaluating-Code-Blocks.html][here]].
+
+*** Src blocks
+These are grabbed from [[https://www.gtrun.org/custom/config][gtrun]]'s configuration.'
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no :results output silent
+(setq org-src-fontify-natively t
+      org-src-preserve-indentation t
+      org-src-tab-acts-natively t
+      org-src-window-setup 'current-window)
+#+end_src
+*** Diff
+The snippet below is largely pulled from John Kitchin [[https://emacs.stackexchange.com/questions/63517/org-mode-evaluate-diff-code-block/63520#63520][Stackexchange Post]].
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(defun org-babel-execute:diff (body params)
+  "Applies diff patches. Use with care.
+See https://emacs.stackexchange.com/questions/63517/org-mode-evaluate-diff-code-block"
+  (with-temp-buffer
+    (insert body "\n")
+    (shell-command-on-region (point-min) (point-max) "patch --strip=1" "*patch*")
+    (prog1
+    (with-current-buffer "*patch*" (buffer-string))
+      (kill-buffer "*patch*"))))
+#+end_src
+
+As an sample:
+
+#+begin_example
+#+BEGIN_SRC org :tangle a.org
+1
+2
+#+END_SRC
+
+#+BEGIN_SRC org :tangle b.org
+1
+3
+#+END_SRC
+#+begin_src diff
+--- a.org   2021-02-21 20:20:27.000000000 -0500
++++ b.org   2021-02-21 20:20:27.000000000 -0500
+@@ -1,2 +1,2 @@
+ 1
+-2
++3
+#+end_src
+
+#+RESULTS:
+: patching file a.org
+
+#+BEGIN_SRC sh
+cat a.org
+#+END_SRC
+
+#+RESULTS:
+| 1 |
+| 3 |
+#+end_example
+
+** Export to Tufte
+Rather than using =org-export-dispatch='s html export, we'll want to use [[https://github.com/ox-tufte/ox-tufte][ox-tufte]]. The HTML output is a more reasonable than the HTML format.
+
+#+BEGIN_SRC emacs-lisp :tangle "packages.el"
+(package! ox-tufte)
+#+END_SRC
+
+Just load the require to setup the dependency.
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(use-package! ox-tufte
+  :interpreter "org"
+  )
+#+end_src
+
+By default the =org-export-dispatch=, includes some basic styling. This causes issues with our HTML. We'll need to turn off these.
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(after! org
+  (setq org-html-head ""
+        org-html-head-extra ""))
+#+end_src
+
+The syntax highlighting for html is done inline in the by default. We don't want to do that; we're using CSS. See the file in [[file:dist/code.css][code.css]] file for more.
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(after! org
+  (setq org-html-htmlize-output-type "css"))
+#+end_src
+
+To use this you will need to include the setup file. This will load the required css & js files. See [[https://orgmode.org/manual/In_002dbuffer-Settings.html][here]] for more.
+
+#+begin_src org :tangle no
+#+SETUPFILE: ~/.dotfiles/emacs/dist/setup.org
+#+end_src
+
+This will load the CSS and JS files located in the =dotfiles/emacs/dist/= directory.
+** Capture
+The default =+org-capture/open-frame= is a little small. Let's modify the parameters to make it a little larger
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(setq +org-capture-frame-parameters '((name . "doom-capture")
+                                      (width . 100)
+                                      (height . 20)
+                                      (transient . t)
+                                      ))
+#+end_src
+
+** Calendaring
+My household is pretty well tied into the Apple ecosystem, and for this context tied to Apple's iCloud Calendars. Apple being Apple makes this difficult to deal with for non-Apple systems. The best way to get this to work seems to by using  [[https://github.com/pimutils/vdirsyncer/][vdirsyncer]] & [[https://github.com/pimutils/khal/][khal]] as an intermediary, then use [[https://github.com/emacsmirror/khalel][khalel]] for the last mile to Emacs. See here for a jumping off point see =vdirsyncer='s [[https://vdirsyncer.pimutils.org/en/stable/tutorials/icloud.html][iCloud tutorial]].
+
+#+begin_src mermaid :results output :tangle no :file ".resources/cal-dirgram.svg" :background-color transparent
+---
+config:
+  theme: dark
+---
+flowchart LR
+    icloud@{ shape: lin-rect, label: " iCloud Calendar" }
+    vdirsyncer["vdirsyncer"]
+    khal["khal"]
+    khalel["khalel"]
+    icloud<-->vdirsyncer
+    vdirsyncer<-->khal
+    khal<-->khalel
+    click vdirsyncer "https://github.com/pimutils/vdirsyncer/"
+    click khal "https://github.com/pimutils/khal/"
+    click khalel "https://github.com/emacsmirror/khalel"
+#+end_src
+
+#+RESULTS:
+[[file:.resources/cal-dirgram.svg]]
+
+Setting up =vdirsyncer= & =khal= is outside the scope of this document.  Lets quickly setup =khalel= to work with =khal=. First install the package from MELPA.
+
+#+begin_src emacs-lisp :tangle "packages.el" :noweb no-export :comments no :results output silent
+(package! khalel)
+#+end_src
+
+Then configure it.  The snippet below will configure this with the following parameters.
+
+1. Calendar  file is located at =~/$org-directory/calendar.org=.
+2. It totally will overwrite the file.
+3. There is a rotating 90 day time frame to import details into the calendar.
+
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(use-package! khalel
+  :after org
+  :config
+  (khalel-add-capture-template)
+  (setq khalel-capture-key "e")
+  (setq khalel-import-org-file (concat org-directory "/" "calendar.org"))
+  (setq khalel-import-org-file-confirm-overwrite nil)
+  (setq khalel-import-end-date "+90d")
+)
+#+end_src
+
+Note: Due to implementation limitations there is no way to get the calendar color at this point in time. =khalel= presently uses =khal='s [[https://khal.readthedocs.io/en/stable/usage.html#cmdoption-format][format flag]]  to produce the results. The ~calendar-color~ argument "changes the output color to the calendar's color". This sends the escape characters to change the color of the string. These characters don't get saved in the output. I may fork this project to use the khal's [[https://khal.readthedocs.io/en/stable/usage.html#cmdoption-json][json output]] flag.
+
+** Agenda
+We want to add all files in the =org-directory= and =org-directory-work= ([[*=work=][ref]]). I'm not sure if =org-agenda-files= is recursive or not so this may be redundant.
+
+#+begin_src emacs-lisp :tangle "+orgmode.el" :noweb no-export :comments no
+(setq org-agenda-files
+      (list org-directory org-directory-work org-roam-dailies-directory))
+#+end_src
+
+See [[*Calendaring][calendaring]] for related information.
+* GPT
+GPT is more useful than I thought. Its incredibly helpful for writing prose which I can struggle with due to mild dysgraphia.
+
+** TRAIL_RUN CoPilot
+I started using Copilot for work a while back. It has gotten significantly better since I first started writing. It's gone from overcaffinated intern level of quality to a highly niche response on stack overflow.  CoPilot have 3 parts.
+
+Use inside of GitHub (PR Reviews, Summaries, etc), Autocomplete++, and finally a chat prompt. I'll be adding the latter to my Emacs.
+
+*** Autocomplete++
+
+For this I'm going to use [[https://github.com/copilot-emacs/copilot.el][copilot-emacs/copilot.el]].
+
+First install the package
+#+BEGIN_SRC emacs-lisp :tangle "packages.el"
+(package! copilot
+  :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
+#+END_SRC
+
+Then configure this
+#+begin_src emacs-lisp
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :bind (:map copilot-completion-map
+              ("[tab]" . 'copilot-accept-completion)
+              ("[M-tab]" . 'copilot-accept-completion)
+              ("M-n" . 'copilot-accept-completion) ; Fallback should tab act weird
+              ))
+#+end_src
+
+This does bind to company, which I've currently removed. See [[*Completion][Completion]] for specifics.
+
+To make it easier to toggle I'm binding this to ~SPC t C~
+
+#+begin_src emacs-lisp :tangle "+keybinds.el" :noweb no-export :comments no
+(map! :leader
+      (:prefix "t"
+       :desc "CoPilot" "C" #'copilot-mode
+       )
+      )
+#+end_src
+
+*** Copilot Chat
+For interacting with Copilot Chat interface I'm using [[https://github.com/chep/copilot-chat.el][chep/copilot-chat]] package.
+
+#+BEGIN_SRC emacs-lisp :tangle "packages.el"
+(package! copilot-chat)
+#+END_SRC
+
+I'm still in early days for this package. For the time being I'm just turning this on & I'll configure it a later date.
+#+begin_src emacs-lisp
+(use-package! copilot-chat
+  :config
+  (setq copilot-chat-default-model "claude-sonnet-4")
+  )
+#+end_src
+
+
+This is a very feature rich package. It has a lot of features that I haven't explored yet. For the time being I'm just going to bind it to ~SPC o c~. This will open the chat interface in a new buffer. This is similar to how =gptel= works, but it has a lot more features.
+
+To launch this use ~SPC o c~ .
+
+#+begin_src emacs-lisp :tangle "+keybinds.el" :noweb no-export :comments no
+(map! :leader
+      (:prefix "o"
+       :desc "Copilot Chat" "c" #'copilot-chat
+       )
+      )
+#+end_src
+
+
+There's a lot of useful features for this package that hard hidden away behind long function names.  I'm going to use ~SPC m~ as a prefix to surface these commands. I may change this prefix later as I don't love this, but it will work for now.
+
+| Keybind   | Command                                | Description                    |
+|-----------+----------------------------------------+--------------------------------|
+| =SPC m k=   | =copilot-chat-transient=                 | Transient Options              |
+| =SPC m a=   | =copilot-chat-add-current-buffer=        | Adds current buffer to context |
+| =SPC m g=   | =copilot-chat-switch-to-buffer=          | Open buffer                    |
+| =SPC m x=   | =copilot-chat-hide=                      | Hide Chat Window               |
+| =SPC m i=   | =copilot-chat-ask-and-insert=            | Ask and insert prompt          |
+| =SPC m m=   | =copilot-chat-set-model=                 | Select Models                  |
+| =SPC m q=   | =copilot-chat-custom-prompt-mini-buffer= | Quick prompt                   |
+| =SPC m r=   | =copilot-chat-reset=                     | Resets Chat & History          |
+|-----------+----------------------------------------+--------------------------------|
+| =SPC m c a= | =copilot-chat-add-buffers=               | Add buffer to Context          |
+| =SPC m c f= | =copilot-chat-add-file=                  | Add file to Context            |
+| =SPC m c r= | =copilot-chat-del-buffers=               | Remove file from Context       |
+| =SPC m c l= | =copilot-chat-list=                      | List files in Context          |
+| =SPC m c w= | =copilot-chat-add-workspace=             | Add Workspace to Context       |
+| =SPC m c d= | =copilot-chat-add-files-under-dir=       | Add Directory to Context       |
+| =SPC m c c= | =copilot-chat-transient-code=            | Transient Context              |
+|-----------+----------------------------------------+--------------------------------|
+| =SPC m h e= | =copilot-chat-explain=                   | Explain                        |
+| =SPC m h d= | =copilot-chat-doc=                       | Add Documentation              |
+| =SPC m h f= | =copilot-chat-fix=                       | Fix                            |
+| =SPC m h o= | =copilot-chat-optimize=                  | Optimize                       |
+| =SPC m h t= | =copilot-chat-test=                      | Write Tests                    |
+| =SPC m h c= | =copilot-chat-custom-prompt-function=    | Custom                         |
+|-----------+----------------------------------------+--------------------------------|
+
+#+begin_src emacs-lisp :tangle "+keybinds.el" :noweb no-export :comments no
+(map! :leader
+      (:prefix-map ("m" . "Copilot Magic")
+       :desc "Transient"          "k"    #'copilot-chat-transient
+       :desc "Add Current Buffer" "a"    #'copilot-chat-add-current-buffer
+       :desc "Go To"              "g"    #'copilot-chat-switch-to-buffer
+       :desc "Hide"               "x"    #'copilot-chat-hide
+       :desc "Ask & Insert"       "i"    #'copilot-chat-ask-and-insert
+       :desc "Select Model"       "m"    #'copilot-chat-set-model
+       :desc "Quick Prompt"       "q"    #'copilot-chat-custom-prompt-mini-buffer
+       :desc "Reset"              "r"    #'copilot-chat-reset
+       :desc "Quick Prompt"       "q"    #'copilot-chat-custom-prompt-mini-buffer
+       :desc "Quick Prompt"       "q"    #'copilot-chat-custom-prompt-mini-buffer
+       (:prefix-map ("c" . "Context")
+          :desc "Add Current Buffer" "a" #'copilot-chat-add-current-buffer
+          :desc "Add File"           "f" #'copilot-chat-add-file
+          :desc "Remove Buffer"      "r" #'copilot-chat-del-buffers
+          :desc "List Files"         "l" #'copilot-chat-list
+          :desc "Add Workspace"      "w" #'copilot-chat-add-workspace
+          :desc "Add Directory"      "d" #'copilot-chat-add-files-under-dir
+          :desc "Transient Code"     "c" #'copilot-chat-transient-code)
+       (:prefix-map ("h" . "Helper")
+          :desc "Explain"             "e" #'copilot-chat-explain
+          :desc "Documentation"       "d" #'copilot-chat-doc
+          :desc "Fix"                 "f" #'copilot-chat-fix
+          :desc "Optimize"            "o" #'copilot-chat-optimize
+          :desc "Test"                "t" #'copilot-chat-test
+          :desc "Custom Prompt"       "c" #'copilot-chat-custom-prompt-function
+       )
+      )
+     )
+#+end_src
+
+**** Commits
+Copilot Chat can be tied into a bunch of different features. For example, we can use it to generate commit messages. This is done by using the =copilot-chat-insert-commit-message= function. This will prompt for a commit message, and then insert it into the current buffer.
+
+#+begin_src emacs-lisp :tangle "+keybinds.el" :noweb no-export :comments no
+(map! :map git-commit-mode-map
+      :localleader
+      "g" #'copilot-chat-insert-commit-message
+      )
+#+end_src
+* Snippets
+We've enabled the [[doom-module:editor snippets][snippets module]] [[*Editor][earlier]]. This will give us use of the [[https://github.com/doomemacs/snippets][Doom Snippets package]], but we'll want to add our own as well. Custom snippets are added under =$DOOMDIR/snippets/= directory. Documentation on how to write snippets can be found at [[http://joaotavora.github.io/yasnippet/snippet-development.html][yas-snippet/documentation]] and [[https://github.com/doomemacs/snippets][doom-snippets github page]].
+
+While we'll want to store these snippets in this orgmode document, using the =+snippets/create= & =snippets/edit= may be useful for creating these.
+
+** Orgmode
+In my work todo and my roam notes I've been using a list elements with nerd-fonts icons under my section header to provide quick links for the context. Below are a few that I've been using.
+
+-  [[github:github/example][github/example]]
+#+begin_src snippet :tangle "snippets/org-mode/egh"
+# -*- mode: snippet -*-
+# name: Github Element
+# uuid: egh
+# key: egh
+# --
+-  ${1:repo}
+#+end_src
+
+- 󰌷  [[https://example.com][example.com]]
+#+begin_src snippet :tangle "snippets/org-mode/elk"
+# -*- mode: snippet -*-
+# name: Link Elment
+# uuid: elk
+# key: elk
+# --
+- 󰌷 ${1:link}
+#+end_src
+
+-  [[https://example.com][Jira-12929]]
+#+begin_src snippet :tangle "snippets/org-mode/eticket"
+# -*- mode: snippet -*-
+# name: Ticket Elment
+# uuid: tickete
+# key: tickete
+# --
+-  ${1:link}
+#+end_src
+
+- 󰊫  [[https://mail.google.com/mail/u/0/FMfcgzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa][Re:Salary Offer]]
+#+begin_src snippet :tangle "snippets/org-mode/egmail"
+# -*- mode: snippet -*-
+# name: Gmail Link Elment
+# uuid: egmail
+# key: egmail
+# --
+- 󰊫 ${1:link}
+#+end_src
+
+* Content Stolen From
+A large amount of the details listed here have been lifted from:
+- [[https://tecosaur.github.io/emacs-config/][tecosaur's literate configuration]].
+- https://zzamboni.org/post/my-emacs-configuration-with-commentary/
+- https://www.gtrun.org/custom/config.htm
+
+* Footnotes
+
+[fn:7]Documentation [[https://github.com/doomemacs/doomemacs/blob/d38787edf48f4c08bdf7ea8b3b54fcbc268f13b5/docs/getting_started.org#additional-files][here]].
+[fn:6]Yes, I'm aware make is a terrible task runner.
+[fn:5] this is documented in [[*Export to Tufte][Export to Tufte]]
+[fn:4] for example this entire paragraph could have been skipped.
+[fn:3]See documentation [[https://github.com/doomemacs/doomemacs/blob/d38787edf48f4c08bdf7ea8b3b54fcbc268f13b5/docs/getting_started.org#configure][here]].
+[fn:2] See [[https://github.com/doomemacs/doomemacs/tree/master/modules/tools/magit#i-recently-updated-and-now-i-get-deferred-error--wrong-type-argument-sequencep-code-reviewauth-token-set-whenever-i-try-to-review][Doom Magit documentation.]]
+[fn:1] See [[https://github.com/doomemacs/doomemacs/tree/master/modules/config/literate#change-where-src-blocks-are-tangled-or-prevent-it-entirely][Doom FAQ on this for more.]]
