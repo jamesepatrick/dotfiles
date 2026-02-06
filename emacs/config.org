@@ -956,6 +956,19 @@ You might want to automatically keep track of when a state change occurred and m
 (setq org-clock-into-drawer t)
 #+end_src
 
+** Org Indent Symbols
+Doom is now using [[https://github.com/minad/org-modern][org-modern]] for it's org-mode styling. The default indent symbols include characters that appear to be missing from some fonts, including JetBrains Mono. Specifically =⯆ BLACK MEDIUM DOWN-POINTING TRIANGLE CENTRED= (U+2BC6) & =⯈ BLACK MEDIUM RIGHT-POINTING TRIANGLE= (U+2BC8) which are used in the third level indentation.
+
+[[file:/Users/james/.dotfiles/emacs/.resources/org-modern-default-ident.png]]
+
+Lets replace that level with a similar character.
+#+begin_src emacs-lisp :tangle "config.d/+org.el" :noweb no-export :comments no
+(setq org-modern-fold-stars '(("▶" . "▼")
+                              ("▷" . "▽")
+                              ("▹" . "▿")
+                              ("▸" . "▾")))
+#+end_src
+
 * Auto-Mode =alist=
 Some files we'll need to set the major-mode for manually. Either based on where the file is located, or its extension. To do this add the value to the =auto-mode-alist= and specify the major mode.
 
