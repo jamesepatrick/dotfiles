@@ -29,7 +29,7 @@ make -C ~/.dotfiles up
 This repo manages configurations for:
 
 - **ZSH** - Shell with modular setup including vi-mode, fzf integration, and custom prompt
-- **Emacs** -  I use vi bindings in Emacs, so I'm a heretic to both churches of Emacs and Vim.
+- **Emacs** - I use vi bindings in Emacs, so I'm a heretic to both churches of Emacs and Vim.
 - **Vim** - Primarily used for quick edits and viewing files, but also has some customizations
 - **Tridactyl** - Vim-like browser extension for Firefox. Seeing a theme here?
 - **Tmux** - Terminal multiplexer for managing multiple terminal sessions
