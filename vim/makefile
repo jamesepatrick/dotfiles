@@ -36,4 +36,3 @@ init:
 	else
 		$(report) warn "cannot find vim?"
 	fi
-

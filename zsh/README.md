@@ -13,11 +13,11 @@ or if you are on a machine where BSD Make is installed by default:
 
 ## File Structure.
 
-The file structure looks something like this: Nodes with a trailing "δ" are directories. 
+The file structure looks something like this: Nodes with a trailing "δ" are directories.
 
 ```
 zsh
-├── environment δ 
+├── environment δ
 │   ├── host δ
 │   └── os δ
 │       ├── darwin δ
@@ -36,7 +36,7 @@ zsh
 * `environment` :: This is the contains environment base logic and contains. At each step of the zsh loading process the `env_loader` function will load the corresponding file.
   * `host` :: Loaded Automatically. Conditionally loads by based on `$HOST` value.
   * `os` :: Loaded Automatically. Conditionally loads by based on `$OSTYPE` value.
-* `makefile` :: Install/Update/Remove makefile. 
+* `makefile` :: Install/Update/Remove makefile.
 * `modules` :: Local modules loaded by zgenom
 * `transient` :: Files that are required for zsh (eg history), that are not to
   be versioned.

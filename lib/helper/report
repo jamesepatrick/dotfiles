@@ -26,4 +26,3 @@ if [[ -z $2 ]] ; then
 else
   format $1 $2
 fi
-

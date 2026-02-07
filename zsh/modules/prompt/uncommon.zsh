@@ -57,4 +57,3 @@ _uncommon_bg_jobs() {
 _uncommon_time(){
   echo "%F{red} %D{%L:%M:%S}%r%f"
 }
-

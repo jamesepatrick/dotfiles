@@ -34,7 +34,7 @@ This repo manages configurations for:
 - **Tridactyl** - Vim-like browser extension for Firefox. Seeing a theme here?
 - **Tmux** - Terminal multiplexer for managing multiple terminal sessions
 
-The setup uses a modular approach where each tool gets its own directory and can be enabled/disabled independently. 
+The setup uses a modular approach where each tool gets its own directory and can be enabled/disabled independently.
 
 # How it works
 
