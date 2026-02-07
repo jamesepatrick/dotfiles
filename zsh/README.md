@@ -32,7 +32,7 @@ zsh
 └── zshrc
 ```
 
-- `environment` :: This is the contains environment base logic and contains. At each step of the zsh loading process the `env_loader` function will load the corresponding file.
+- `environment` :: Contains the environment base logic. At each step of the zsh loading process the `env_loader` function will load the corresponding file.
   - `host` :: Loaded Automatically. Conditionally loads by based on `$HOST` value.
   - `os` :: Loaded Automatically. Conditionally loads by based on `$OSTYPE` value.
 - `makefile` :: Install/Update/Remove makefile.
