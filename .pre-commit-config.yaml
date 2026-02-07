@@ -22,6 +22,12 @@ repos:
       - id: detect-private-key
       # Check YAML syntax
       - id: check-yaml
+      # Check JSON syntax
+      - id: check-json
+      # Check TOML syntax
+      - id: check-toml
+      # Check XML syntax
+      - id: check-xml
       # Fix mixed line endings
       - id: mixed-line-ending
         args: ['--fix=lf']
@@ -29,6 +35,18 @@ repos:
       - id: check-symlinks
       # Check for broken symlinks
       - id: destroyed-symlinks
+      # Ensure executable files have shebangs
+      - id: check-executables-have-shebangs
+        # Exclude config files that are sourced, not executed
+        exclude: '^(tmux/tmux\.conf|zsh/modules/prompt/uncommon\.zsh)$'
+      # Ensure scripts with shebangs are executable
+      - id: check-shebang-scripts-are-executable
+        # Exclude ZSH dotfiles that are sourced by the shell, not executed directly
+        exclude: '^zsh/(zlogout|zlogin|zprofile|zshrc|zshenv|zgenom|modules/.*/init\.zsh|environment/.*/(zshenv|zprofile|zshrc))$'
+      # Prevent non-permanent VCS permalinks
+      - id: check-vcs-permalinks
+      # Prevent accidental submodule additions
+      - id: forbid-new-submodules
 
   # Shell script linting
   - repo: https://github.com/shellcheck-py/shellcheck-py
@@ -37,4 +55,20 @@ repos:
       - id: shellcheck
         args: [--severity=warning]
         # Exclude ZSH files as shellcheck doesn't support ZSH syntax
-        exclude: '^(zsh/|lib/post-merge|.*\.zsh$)'
+        exclude: '^(zsh/|lib/.*|.*\.zsh$)'
+
+  # Optional: Markdown linting (disabled by default - uncomment to enable)
+  # Note: This enforces strict markdown style which may not fit all preferences
+  # - repo: https://github.com/igorshubovych/markdownlint-cli
+  #   rev: v0.39.0
+  #   hooks:
+  #     - id: markdownlint
+  #       args: ['--fix']
+
+  # Optional: Makefile linting (disabled by default - uncomment to enable)
+  # Note: This enforces standard makefile conventions (all, clean, test targets)
+  # which may not be needed for simple dotfile makefiles
+  # - repo: https://github.com/mrtazz/checkmake
+  #   rev: 0.2.2
+  #   hooks:
+  #     - id: checkmake

@@ -11,7 +11,7 @@ or if you are on a machine where BSD Make is installed by default:
 
 ```gmake install```
 
-## File Structure.
+## File Structure
 
 The file structure looks something like this: Nodes with a trailing "δ" are directories.
 

@@ -1,4 +1,4 @@
-#! env zsh
+#!/usr/bin/env zsh
 # -*- sh -*-
 
 REPORT="`dirname $0`/report"
