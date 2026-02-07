@@ -418,25 +418,6 @@ tree-sitter       ; syntax and parsing, sitting in a tree...
 
 NOTE:   =:leader r= is currently being used by roam. See [[*Keybinds][Roam Keybinds]]. This conflicts with the =upload= module. If you wish to use this module in the future you will need to updated one of the keybinds to not conflict.
 
-*** Magit Forge Support
-For use with Github this requires the creation of a Github Token (see [[https://github.com/settings/tokens][here]]). This will need to be appended to your =~/.authinfo.gpg= file using the format below[fn:2].
-
-#+begin_src authinfo :tangle no
-machine api.github.com login yourlogin^code-review password MYTOKENGOESHERE
-#+end_src
-
-For more on Forge see [[https://magit.vc/manual/forge.html][Magit's Forge documentation]].
-**** Commit Mode
-There's no local mode for commit-mode, so lets add some basics
-
-#+begin_src emacs-lisp :tangle "config.d/+keybinds.el" :noweb no-export :comments no
-(map! :map git-commit-mode-map
-      :localleader
-      "n" #'git-commit-next-message
-      "p" #'git-commit-prev-message
-      )
-#+End_src
-
 ** Language
 https://github.com/doomemacs/doomemacs/tree/master/modules/lang
 
@@ -981,6 +962,32 @@ Because I'm a weird vim guy, I use Firefox with [[https://github.com/tridactyl/t
 #+begin_src emacs-lisp :tangle "config.el" :noweb no-export :comments no
 (add-to-list 'auto-mode-alist '("/\\(tmp\\|private/var\\)/.*/tmp_.*\\.txt" . markdown-mode))
 #+end_src
+
+* Magit
+[[https://magit.vc/][Magit]] is a git porcelain built on top of Emacs. On top of providing a fully featured git interface, and being extensible, it also supports multiple source code forges.
+
+** Magit Forge Support
+For use with Github this requires the creation of a Github Token (see [[https://github.com/settings/tokens][here]]). This will need to be appended to your =~/.authinfo.gpg= file using the format below[fn:2].
+
+#+begin_src authinfo :tangle no
+machine api.github.com login yourlogin^code-review password MYTOKENGOESHERE
+#+end_src
+
+For more on Forge see [[https://magit.vc/manual/forge.html][Magit's Forge documentation]].
+
+** Commit Mode
+There's no local mode for commit-mode, so lets add some basics
+
+#+begin_src emacs-lisp :tangle "config.d/+keybinds.el" :noweb no-export :comments no
+(map! :map git-commit-mode-map
+      :localleader
+      "n" #'git-commit-next-message
+      "p" #'git-commit-prev-message
+      )
+#+End_src
+
+** LLM Commit Summary
+See [[*Pending Commits][Pending Commits]] for more on this.
 
 * Mermaid Support
 [[https://mermaid.js.org/][Mermaid]] is an opensource diagramming markup language similar to [[https://graphviz.org/][Graphviz]]. It can be used to create a various diagram types, can export to png, svg, or html, and is [[https://github.blog/developer-skills/github/include-diagrams-markdown-files-mermaid/][natively supported by GitHub]]. In short I think its pretty neat.
