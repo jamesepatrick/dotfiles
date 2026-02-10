@@ -25,7 +25,7 @@ contact me.
 ## Quick start
 
 ```sh
-git clone https://github.com/jamesepatrick/dotfiles/
+git clone https://github.com/jamesepatrick/dotfiles/ ~/.dotfiles
 make -C ~/.dotfiles up
 ```
 
