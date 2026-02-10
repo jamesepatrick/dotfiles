@@ -44,5 +44,5 @@ directories.
   be versioned.
 - `zlogin`/`zlogout`/`zprofile`/etc :: The default shell resource files. See
   [here](https://shreevatsa.wordpress.com/2008/03/30/zshbash-startup-files-loading-order-bashrc-zshrc-etc/)
-  for more infomation on load order.
+  for more information on load order.
 - `zgenom` :: How to load modules.

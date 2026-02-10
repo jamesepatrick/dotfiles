@@ -18,7 +18,7 @@ contact me.
 5. Any rule can ignored if it has a non-stupid reason.
 6. Take lots of screenshots.
 7. Don't be an idiot and store large files.
-8. Git-crypt is used to store some semi-sentive data. All encrypted data should
+8. Git-crypt is used to store some semi-sensitive data. All encrypted data should
    assumed to be able to be brute for in the future for pocket change. Do not
    store important data this way.
 
