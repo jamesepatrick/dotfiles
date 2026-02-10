@@ -23,4 +23,3 @@ setup:
 	$(report) header "Setting up Tridaycl"
 	$(mk_link) $(SRC_DIR) $(RC_TARGET)
 	$(mk_link) $(SRC_DIR)/scripts $(SCRIPTS_TARGET)
-

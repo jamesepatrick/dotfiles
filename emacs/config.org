@@ -371,7 +371,7 @@ https://github.com/doomemacs/doomemacs/tree/master/modules/term
 vterm             ; the best terminal emulation in Emacs
 #+end_src
 
-Vterm is great. It does require some additional configuration to work properly. See [[https://github.com/doomemacs/doomemacs/tree/master/modules/term/vterm][relavant doc]] for more.
+Vterm is great. It does require some additional configuration to work properly. See [[https://github.com/doomemacs/doomemacs/tree/master/modules/term/vterm][relevant doc]] for more.
 
 ** Checker
 https://github.com/doomemacs/doomemacs/tree/master/modules/checker
@@ -627,7 +627,7 @@ Its a little annoying to have to go through the leader key for this all the time
 * OrgMode
 OrgMode is ridiculous. It's a combination note taking, todo-list, jupyter notebook, & calendaring major-mode for Emacs. It is incredibly configurable and extendable, and feature rich to the degree that discovering spreadsheet support after using it for 6 months seems to be a rite of passage. It's wonderful and terrible in a lot of the ways emacs itself is. That said its one of the primary reasons I can't leave emacs.
 
-I currently have my files synced via git (see [[*Syncing][Syncing]] for details). But I've yet to find a good mobile clients. I've bounced off [[https://logseq.com/][LogSeq]] multiple times. [[https://xenodium.com][xenodium's]] great [[https://xenodium.com/plain-org-for-ios][PlainOrg]], doesn't vibe well with a roam style setup. I'm tempted to build my own implemention ([[https://xkcd.com/927/][relevant XKCD]]), but given the small child & a growing list household projects, this isn't likely soon.
+I currently have my files synced via git (see [[*Syncing][Syncing]] for details). But I've yet to find a good mobile clients. I've bounced off [[https://logseq.com/][LogSeq]] multiple times. [[https://xenodium.com][xenodium's]] great [[https://xenodium.com/plain-org-for-ios][PlainOrg]], doesn't vibe well with a roam style setup. I'm tempted to build my own implementation ([[https://xkcd.com/927/][relevant XKCD]]), but given the small child & a growing list household projects, this isn't likely soon.
 
 ** Making Scripting a little easier.
 Doom is pretty quick, but we don't need the entire thing for scripts. The =$DOOMDIR/config.d/+org.el= should be written in such a way to allow it to be imported for easy scripting. To wit
@@ -1171,7 +1171,7 @@ In my work todo and my roam notes I've been using a list elements with nerd-font
 - 󰌷  [[https://example.com][example.com]]
 #+begin_src snippet :tangle "snippets/org-mode/elk"
 # -*- mode: snippet -*-
-# name: Link Elment
+# name: Link Element
 # uuid: elk
 # key: elk
 # --
@@ -1181,7 +1181,7 @@ In my work todo and my roam notes I've been using a list elements with nerd-font
 -  [[https://example.com][Jira-12929]]
 #+begin_src snippet :tangle "snippets/org-mode/eticket"
 # -*- mode: snippet -*-
-# name: Ticket Elment
+# name: Ticket Element
 # uuid: tickete
 # key: tickete
 # --
@@ -1191,7 +1191,7 @@ In my work todo and my roam notes I've been using a list elements with nerd-font
 - 󰊫  [[https://mail.google.com/mail/u/0/FMfcgzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa][Re:Salary Offer]]
 #+begin_src snippet :tangle "snippets/org-mode/egmail"
 # -*- mode: snippet -*-
-# name: Gmail Link Elment
+# name: Gmail Link Element
 # uuid: egmail
 # key: egmail
 # --

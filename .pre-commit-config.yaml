@@ -1,0 +1,60 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ["--maxkb=500"]
+      - id: detect-private-key
+      - id: check-yaml
+      - id: check-xml
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+      - id: check-symlinks
+      - id: destroyed-symlinks
+      - id: check-executables-have-shebangs
+        # Exclude config files that are sourced, not executed
+        exclude: '^(tmux/tmux\.conf|zsh/modules/prompt/uncommon\.zsh)$'
+      - id: check-shebang-scripts-are-executable
+        # Exclude ZSH dotfiles that are sourced by the shell, not executed directly
+        exclude: '^zsh/(zlogout|zlogin|zprofile|zshrc|zshenv|zgenom|modules/.*/init\.zsh|environment/.*/(zshenv|zprofile|zshrc))$'
+      - id: check-vcs-permalinks
+      # Prevent UTF-8 byte order marker
+      - id: check-byte-order-marker
+      - id: debug-statements
+
+  # Shell script linting
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.9.0.6
+    hooks:
+      - id: shellcheck
+        args: [--severity=warning]
+        # Exclude ZSH files as shellcheck doesn't support ZSH syntax
+        exclude: '^(zsh/|lib/.*|.*\.zsh$)'
+
+  # Prettier for code formatting (CSS, JS, JSON, YAML, Markdown)
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        types_or: [css, javascript, json, yaml, markdown]
+        # Exclude certain directories
+        exclude: '^(emacs/dist/|.*\.min\.js|.*\.min\.css)'
+
+  # Note: This is an opinionated linter; if this one causes an issue remote it.
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.39.0
+    hooks:
+      - id: markdownlint
+        args: ["--fix"]
+
+  - repo: https://github.com/thoughtworks/talisman
+    rev: "v1.32.2"
+    hooks:
+      - id: talisman-commit

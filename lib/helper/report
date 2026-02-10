@@ -1,4 +1,4 @@
-#! env zsh
+#!/usr/bin/env zsh
 # -*- sh -*-
 R='\033[0;31m'
 Y='\033[0;33m'
@@ -26,4 +26,3 @@ if [[ -z $2 ]] ; then
 else
   format $1 $2
 fi
-

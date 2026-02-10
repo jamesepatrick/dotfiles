@@ -1,4 +1,4 @@
-#! env zsh
+#!/usr/bin/env zsh
 # -*- sh -*-
 REPORT=`dirname $0`/report
 
@@ -19,4 +19,3 @@ fi
 
 $REPORT pass "Deleting $1"
 rm  $1
-
