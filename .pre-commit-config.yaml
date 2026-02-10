@@ -47,18 +47,9 @@ repos:
         # Exclude certain directories
         exclude: '^(emacs/dist/|.*\.min\.js|.*\.min\.css)'
 
-  # Optional: Markdown linting (disabled by default - uncomment to enable)
-  # Note: This enforces strict markdown style which may not fit all preferences
-  # - repo: https://github.com/igorshubovych/markdownlint-cli
-  #   rev: v0.39.0
-  #   hooks:
-  #     - id: markdownlint
-  #       args: ['--fix']
-
-  # Optional: Makefile linting (disabled by default - uncomment to enable)
-  # Note: This enforces standard makefile conventions (all, clean, test targets)
-  # which may not be needed for simple dotfile makefiles
-  # - repo: https://github.com/mrtazz/checkmake
-  #   rev: 0.2.2
-  #   hooks:
-  #     - id: checkmake
+  # Note: This is an opinionated linter; if this one causes an issue remote it.
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.39.0
+    hooks:
+      - id: markdownlint
+        args: ["--fix"]
