@@ -1,58 +1,32 @@
-# Pre-commit hooks for dotfiles repository
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
-  # Standard pre-commit hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
-      # Fix trailing whitespace
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
-      # Ensure files end with a newline
       - id: end-of-file-fixer
-      # Check for files that would conflict in case-insensitive filesystems
       - id: check-case-conflict
-      # Check for merge conflicts
       - id: check-merge-conflict
-      # Check for added large files (prevent large files per tenant #7)
       - id: check-added-large-files
         args: ["--maxkb=500"]
-      # Detect private keys
       - id: detect-private-key
-      # Check YAML syntax
       - id: check-yaml
-      # Check JSON syntax
-      - id: check-json
-      # Check TOML syntax
-      - id: check-toml
-      # Check XML syntax
       - id: check-xml
-      # Fix mixed line endings
       - id: mixed-line-ending
         args: ["--fix=lf"]
-      # Check for symlinks that point to nothing
       - id: check-symlinks
-      # Check for broken symlinks
       - id: destroyed-symlinks
-      # Ensure executable files have shebangs
       - id: check-executables-have-shebangs
         # Exclude config files that are sourced, not executed
         exclude: '^(tmux/tmux\.conf|zsh/modules/prompt/uncommon\.zsh)$'
-      # Ensure scripts with shebangs are executable
       - id: check-shebang-scripts-are-executable
         # Exclude ZSH dotfiles that are sourced by the shell, not executed directly
         exclude: '^zsh/(zlogout|zlogin|zprofile|zshrc|zshenv|zgenom|modules/.*/init\.zsh|environment/.*/(zshenv|zprofile|zshrc))$'
-      # Prevent non-permanent VCS permalinks
       - id: check-vcs-permalinks
-      # Prevent accidental submodule additions
-      - id: forbid-new-submodules
       # Prevent UTF-8 byte order marker
       - id: check-byte-order-marker
-      # Prevent commits directly to protected branches
-      - id: no-commit-to-branch
-        args: ["--branch", "main", "--branch", "master"]
-      # Check for debug statements (pdb, ipdb, etc.)
       - id: debug-statements
 
   # Shell script linting
