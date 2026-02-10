@@ -83,7 +83,7 @@ tree $DOOMDIR -L 2
 Doom has a lot of configuration has a lot of flexibility & a large number of doing things incorrectly. At its most basic there are 3 files create and used by default for your ~$DOOMDIR~.
 
 + =init.el= :: Enabled Doom Modules
-+ =package.el= :: Packages to fetch from MELPA, GitHub, etc.
++ =packages.el= :: Packages to fetch from MELPA, GitHub, etc.
 + =config.el= :: General Emacs configuration
 
 In addition to these there exists the following special directories
@@ -1127,10 +1127,10 @@ There's a handful of agent style plugins for emacs. I'm currently testing out [[
 
 
 #+begin_src emacs-lisp :tangle "modules/tools/llm/config.el" :noweb no-export :comments no
-;(use-package! copilot-chat
-;  :config
-;  (setq copilot-chat-default-model "claude-sonnet-4")
-;  )
+(use-package! copilot-chat
+  :config
+  (setq copilot-chat-default-model "claude-sonnet-4")
+  )
 #+end_src
 
 #+begin_src emacs-lisp :tangle "modules/tools/llm/keybinds.el" :noweb no-export :comments no
