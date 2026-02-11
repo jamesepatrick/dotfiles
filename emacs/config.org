@@ -989,6 +989,30 @@ There's no local mode for commit-mode, so lets add some basics
 ** LLM Commit Summary
 See [[*Pending Commits][Pending Commits]] for more on this.
 
+** Pre-Commit
+[[https://pre-commit.com/][Pre-Commit]] is a framework for managing multi-language pre-commit hooks. It can be used to run linters, formatters, or basically any script you could want to run before a commit. [[https://github.com/DamianB-BitFlipper][DamianB-BitFlipper]] has an integration for pre-commit & magit that allows you to run pre-commit hooks via the =@= character in any magit buffer (see [[https://github.com/DamianB-BitFlipper/magit-pre-commit.el][magit-pre-commit.el]]).
+
+Lets install the package first.
+#+begin_src emacs-lisp :tangle "packages.el" :noweb no-export :comments no :results output silent
+(package! magit-pre-commit)
+#+end_src
+
+When enabling this package there are two tweaks we want to make.
+
+1. The default prefix is =@= which conflicts with the default forge prefix. I'm going to change this to =#=, which is currently unbound.
+2. We want to enable this in all magit buffers, so we'll add it to the =magit-mode-hook=.
+
+Then set to load it after magit gets loaded.
+#+begin_src emacs-lisp :tangle "config.el" :noweb no-export :comments no :results output silent
+(use-package! magit-pre-commit
+  :after magit
+  :init
+  (setq magit-pre-commit-transient-prefix "#")
+  :config
+  (add-hook 'magit-mode-hook #'magit-pre-commit-mode)
+  )
+#+end_src
+
 * Mermaid Support
 [[https://mermaid.js.org/][Mermaid]] is an opensource diagramming markup language similar to [[https://graphviz.org/][Graphviz]]. It can be used to create a various diagram types, can export to png, svg, or html, and is [[https://github.blog/developer-skills/github/include-diagrams-markdown-files-mermaid/][natively supported by GitHub]]. In short I think its pretty neat.
 
