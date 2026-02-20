@@ -566,6 +566,49 @@ I'm normally running a titling window manager so this is usually less of an issu
 (add-to-list 'default-frame-alist '(width . 192))
 #+end_src
 
+** Better Linter Messaging
+[[https://github.com/konrad1977/flyover?][Flyover]] is a more modern overlay for the flymake & flycheck linting systems in Emacs.
+
+ #+CAPTION: Flyover Example
+[[./.resources/flyover.png]]
+
+#+CAPTION: Flyover Example Source
+#+begin_src python :tangle no :noweb no-export :comments no :results output silent
+import sys
+
+def my_function(  a, b ):
+    print( 'Adding numbers...' )
+    result = a +  b
+    print( "Result is",result )
+
+x = myFunction (5,8 )
+#+end_src
+
+#+begin_src emacs-lisp :tangle "packages.el" :noweb no-export :comments no :results output silent
+(package! flyover)
+#+end_src
+
+We want to enable it with hooks for both flycheck & flymake. There is a lot of configuration settings. I'm just going pretty basic with minor tweaks to the colors & tints used.
+
+#+begin_src emacs-lisp :tangle "config.d/+ui.el" :noweb no-export :comments no
+(use-package flyover
+  :ensure t
+  :hook ((flycheck-mode . flyover-mode)
+         (flymake-mode . flyover-mode))
+  :custom
+  (flyover-checkers '(flycheck flymake))
+  (flyover-hide-during-completion t)
+  ;; UI tweaks
+  (flyover-use-theme-colors t)
+  (flyover-text-tint 'lighter)
+  (flyover-text-tint-percent 70)
+  (flyover-icon-tint 'lighter)
+  (flyover-icon-tint-percent 50)
+  (flyover-icon-background-tint 'darker)
+  (flyover-icon-background-tint-percent 30)
+  )
+#+end_src
+
 * Projectile Project Search
 I primarily keep my code either in =$HOME/Code= or nested inside =$HOME/Documents=. Let's have emacs check these directories
 #+begin_src emacs-lisp :tangle "config.el" :noweb no-export :comments no
