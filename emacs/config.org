@@ -586,7 +586,7 @@ I'm normally running a titling window manager so this is usually less of an issu
 [[https://github.com/konrad1977/flyover?][Flyover]] is a more modern overlay for the flymake & flycheck linting systems in Emacs.
 
  #+CAPTION: Flyover Example
-[[./.resources/flyover.png]]
+[[./.resources/flyover_sample.png]]
 
 #+CAPTION: Flyover Example Source
 #+begin_src python :tangle no :noweb no-export :comments no :results output silent
