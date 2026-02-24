@@ -434,8 +434,6 @@ tree-sitter       ; syntax and parsing, sitting in a tree...
 ;;upload            ; map local to remote projects via ssh/ftp
 #+end_src
 
-NOTE:   =:leader r= is currently being used by roam. See [[*Keybinds][Roam Keybinds]]. This conflicts with the =upload= module. If you wish to use this module in the future you will need to updated one of the keybinds to not conflict.
-
 ** Language
 https://github.com/doomemacs/doomemacs/tree/master/modules/lang
 
