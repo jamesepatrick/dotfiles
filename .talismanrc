@@ -1,0 +1,4 @@
+fileignoreconfig:
+- filename: emacs/config.org
+  checksum: ff117268e3fbb5f480f7c980ac28a68d2e04255b3b6613336b7e7de3fba381d2
+version: ""
