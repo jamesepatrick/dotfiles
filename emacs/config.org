@@ -1281,7 +1281,42 @@ In my work todo and my roam notes I've been using a list elements with nerd-font
 - 󰊫 ${1:link}
 #+end_src
 
+* Export to Tufte
+Rather than using =org-export-dispatch='s html export, we'll want to use [[https://github.com/ox-tufte/ox-tufte][ox-tufte]]. The HTML output is a more reasonable than the HTML format.
 
+#+BEGIN_SRC emacs-lisp :tangle "packages.el"
+(package! ox-tufte)
+#+END_SRC
+
+Just load the require to setup the dependency.
+#+begin_src emacs-lisp :tangle "config.d/+org.el" :noweb no-export :comments no
+(use-package! ox-tufte
+  :interpreter "org"
+  )
+#+end_src
+
+By default the =org-export-dispatch=, includes some basic styling. This causes issues with our HTML. We'll need to turn off these.
+
+#+begin_src emacs-lisp :tangle "config.d/+org.el" :noweb no-export :comments no
+(after! org
+  (setq org-html-head ""
+        org-html-head-extra ""))
+#+end_src
+
+The syntax highlighting for html is done inline in the by default. We don't want to do that; we're using CSS. See the file in [[file:dist/code.css][code.css]] file for more.
+
+#+begin_src emacs-lisp :tangle "config.d/+org.el" :noweb no-export :comments no
+(after! org
+  (setq org-html-htmlize-output-type "css"))
+#+end_src
+
+To use this you will need to include the setup file. This will load the required css & js files. See [[https://orgmode.org/manual/In_002dbuffer-Settings.html][here]] for more.
+
+#+begin_src org :tangle no
+#+SETUPFILE: ~/.dotfiles/emacs/dist/setup.org
+#+end_src
+
+This will load the CSS and JS files located in the =dotfiles/emacs/dist/= directory.
 * Credit & Sources of Theft
 A large amount of the details listed here have been lifted from:
 - [[https://tecosaur.github.io/emacs-config/][tecosaur's literate configuration]].
