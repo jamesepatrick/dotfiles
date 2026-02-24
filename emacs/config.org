@@ -52,8 +52,6 @@ will produce
 ** Files tree
 There's a fair number of files located in ~$DOOMDIR~.  Some are configuration, some are additional tooling not use directly by emacs.
 
-- [ ] TODO: Update as we go.
-
 #+begin_src bash :tangle no :exports result :results output verbatim
 tree $DOOMDIR -L 2
 #+end_src
@@ -61,22 +59,30 @@ tree $DOOMDIR -L 2
 #+RESULTS:
 #+begin_example
 .
-├── config.html
-├── config.old.org
+├── backup_init.el
+├── config.d
+│   ├── +keybinds.el
+│   ├── +org.el
+│   └── +ui.el
+├── config.el
 ├── config.org
+├── custom.el
 ├── dist
 │   ├── bundle.js
 │   ├── code.css
 │   ├── custom.css
 │   ├── setup.org
 │   └── tufte.css
+├── init.el
 ├── makefile
+├── modules
+│   ├── lang
+│   └── tools
+├── packages.el
 └── snippets
     └── org-mode
 
-4 directories, 9 files
-
-/Users/james/.dotfiles/emacs
+8 directories, 17 files
 #+end_example
 
 *** Emacs Configuration Files
@@ -98,6 +104,7 @@ Currently, this includes[fn:4]
 - =+keybinds.el= ::  A relatively new and not fully utilized file. The plan is to use this as a centralized location for all custom key binds.
 - =+ui.el= :: General Purpose UI changes.
 
+We also have an additional backup_init.el file. This is used to stub in the =init.el= config with literate
 *** Non-Doom Files
 - =makefile= :: You know what makes a terrible alternative to things like [[https://www.gnu.org/software/stow/][stow]], [[https://github.com/yadm-dev/yadm][yadm]], or [[https://github.com/twpayne/chezmoi][chezmoi]]? Know what I'm using anyways?[fn:2]
 - =dist/= :: These are files used by the output of [[https://github.com/ox-tufte/ox-tufte][ox-tufte]].[fn:3] TODO Move this to assets
@@ -130,14 +137,25 @@ FOO=${DOOMDIR:-${HOME}/.config/doom} find ${FOO}* -iname '*.el' | sed "s/^${FOO}
 #+end_src
 
 #+RESULTS:
-: config.d/+keybinds.el
-: config.d/+org.el
-: config.d/+ui.el
-: config.el
-: init.el
-: packages.el
+#+begin_example
+backup_init.el
+config.d/+keybinds.el
+config.d/+org.el
+config.d/+ui.el
+config.el
+custom.el
+init.el
+modules/tools/llm/keybinds.el
+modules/tools/llm/packages.el
+modules/tools/llm/config.el
+modules/lang/mermaid/packages.el
+modules/lang/mermaid/package.el
+modules/lang/mermaid/config.el
+modules/lang/mermaid/doctor.el
+packages.el
+#+end_example
 
-Since we've used a named these blocks we can use [[*Noweb Reference][Noweb Reference]] for all the files. Lets define a new section
+Since we've used a named these blocks we can use [[*No-Web Reference][No-Web Reference]] for all the files. Lets define a new section
 
 #+name:elisp-header
 #+begin_src emacs-lisp :tangle no :noweb no-export
@@ -388,7 +406,7 @@ grammar           ; tasing grammar mistake every you make
 (setq ispell-dictionary "en"
       ispell-personal-dictionary (concat org-directory ".ispell.en.pws"))
 #+end_src
-TODO: I'm not sure why this isn't working. I'll need to research this
+
 ** Tools
 https://github.com/doomemacs/doomemacs/tree/master/modules/tools
 
