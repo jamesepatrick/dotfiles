@@ -1157,10 +1157,12 @@ Lets just go a head and stub in the elisp header for =packages.el=,
 ** Autocomplete++
 The [[https://github.com/copilot-emacs/copilot.el][copilot-emacs/copilot.el]] package just provides the LLM based completion tooling. It works pretty well, but can get in the way. It's like having an overly caffinated junior developer pairing with you. It can more often then not get to where you're going, but may miss the forest for the trees.
 
-First lets setup the dependency.
+First lets setup the dependency. I've pinned this to the version 3.0 release. 4.0 introduced chat function that conflicts with functions from [[*CoPilot Chat][CoPilot Chat]]. I could ignore not load the .el function with the conflicts, but eh.
 #+begin_src emacs-lisp :tangle "modules/tools/llm/packages.el" :noweb no-export :comments no
 (package! copilot
-  :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
+  :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
+  :pin "b98754712ad05282e1bb392bb35e5918ed35c9b6"
+  )
 #+end_src
 
 By default lets enabled this in programming modes & in org-mode. Lets also define the default indent level to work around the annoying warning.
