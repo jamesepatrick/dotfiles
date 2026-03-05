@@ -1,7 +1,7 @@
 #+title: Doom Emacs Configuration
 #+AUTHOR: James Patrick
 #+SETUPFILE: ./dist/setup.org
-#+TODO: TRAIL_RUN(t) REFACTOR_NEEDED(r) |
+#+TODO: TRAIL_RUN(t) REFACTOR_NEEDED(r) BROKEN(b) |
 #+PROPERTY: header-args :mkdirp yes
 
 This Emacs configuration is written in the style of [[https://en.wikipedia.org/wiki/Literate_programming][Literate Programming]] paradigm & using Hlissner's awesome [[https://github.com/doomemacs/doomemacs][Doom Emacs]] framework. I'll detail the "how" and "why" as I get a better figure out what the hell I'm doing. My current configuration is the result of trying to solidify a collection of outdated work around, snippets cribbed from Stack Overflow, ideas from folks smarter than I am, then held together with string & bubble gum. Please don't hesitate to tell me my elisp-fu sucks or if there's a better way to do anything. If you have any questions please let me know.
@@ -1048,12 +1048,13 @@ There's no local mode for commit-mode, so lets add some basics
 ** LLM Commit Summary
 See [[*Pending Commits][Pending Commits]] for more on this.
 
-** Pre-Commit
-[[https://pre-commit.com/][Pre-Commit]] is a framework for managing multi-language pre-commit hooks. It can be used to run linters, formatters, or basically any script you could want to run before a commit. [[https://github.com/DamianB-BitFlipper][DamianB-BitFlipper]] has an integration for pre-commit & magit that allows you to run pre-commit hooks via the =@= character in any magit buffer (see [[https://github.com/DamianB-BitFlipper/magit-pre-commit.el][magit-pre-commit.el]]).
+** BROKEN Pre-Commit
+NOTE: This is currently broken see [[*Status][Status]] for more.
 
+[[https://pre-commit.com/][Pre-Commit]] is a framework for managing multi-language pre-commit hooks. It can be used to run linters, formatters, or basically any script you could want to run before a commit. [[https://github.com/DamianB-BitFlipper][DamianB-BitFlipper]] has an integration for pre-commit & magit that allows you to run pre-commit hooks via the =@= character in any magit buffer (see [[https://github.com/DamianB-BitFlipper/magit-pre-commit.el][magit-pre-commit.el]]).
 Lets install the package first.
 #+begin_src emacs-lisp :tangle "packages.el" :noweb no-export :comments no :results output silent
-(package! magit-pre-commit)
+;(package! magit-pre-commit)
 #+end_src
 
 When enabling this package there are two tweaks we want to make.
@@ -1063,14 +1064,23 @@ When enabling this package there are two tweaks we want to make.
 
 Then set to load it after magit gets loaded.
 #+begin_src emacs-lisp :tangle "config.el" :noweb no-export :comments no :results output silent
-(use-package! magit-pre-commit
-  :after magit
-  :init
-  (setq magit-pre-commit-transient-prefix "#")
-  :config
-  (add-hook 'magit-mode-hook #'magit-pre-commit-mode)
-  )
+;(use-package! magit-pre-commit
+;  :after magit
+;  :init
+;  (setq magit-pre-commit-transient-prefix "#")
+;  :config
+;  (add-hook 'magit-mode-hook #'magit-pre-commit-mode)
+;  )
 #+end_src
+
+*** Status
+This is currently broken when used with recent versions of =transient=. Attempting to invoke =magit= results in the following error message
+
+#+begin_quote
+=transient--parse-suffix: Need command, argument, ':info', ':info*' or ':cons'; got ':description'=
+#+end_quote
+
+Github user [[https://github.com/glucas][glucas]] as reported this in ticket [[https://github.com/DamianB-BitFlipper/magit-pre-commit.el/issues/3][DamianB-BitFlipper/magit-pre-commit.el #3]], last updated Jan 25, 2026. This should be a simple fix, but I don't presently have the time to implement it myself. I've disabled the package for now, but will re-enable it once this is resolved.
 
 * Mermaid Support
 [[https://mermaid.js.org/][Mermaid]] is an opensource diagramming markup language similar to [[https://graphviz.org/][Graphviz]]. It can be used to create a various diagram types, can export to png, svg, or html, and is [[https://github.blog/developer-skills/github/include-diagrams-markdown-files-mermaid/][natively supported by GitHub]]. In short I think its pretty neat.
