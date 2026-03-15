@@ -78,7 +78,7 @@ brew "texinfo"
 brew "tree-sitter"
 brew "zlib"
 # Emacs!
-brew "emacs-plus@30", args: ["with-ctags", "with-xwidgets", "with-imagemagick", "with-native-comp", "with-modern-doom3-icon"]
+cask "emacs-plus-app@master"
 # Configuration Dependencies
 brew "aspell"
 brew "bash-language-server"
