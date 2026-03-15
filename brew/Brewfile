@@ -23,7 +23,6 @@ brew "pipx"
 brew "poppler"
 brew "rga"
 brew "ripgrep"
-brew "terraform"
 brew "terraformer"
 brew "tesseract"
 brew "the_silver_searcher"
@@ -102,7 +101,7 @@ brew "stylelint"
 cask "font-alegreya"
 cask "font-hasklig"
 cask "font-hasklug-nerd-font"
-tap "hashicorp/tap" ; brew "hashicorp/tap/terraform-ls"
+tap "hashicorp/tap" ; brew "hashicorp/tap/terraform-ls" ; brew "hashicorp/tap/terraform"
 
 
 # Work
