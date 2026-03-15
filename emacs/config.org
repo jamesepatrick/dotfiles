@@ -1207,12 +1207,27 @@ To toggle the minor mode you can use =SPC t C=.
 Once your install is setup you'll need to install the server using =copilot-install-server=. Then authenticate using =copilot-login=. After this you should be good to go. If you run into use =copilot-diagnose= for more.
 
 ** Agent Mode
-There's a handful of agent style plugins for emacs. I'm currently testing out [[https://eca.dev/][eca]] (Editor Code Assistant). First lets install this
+There's a good number of agent style tools. I've previously tried [[https://eca.dev/][eca]] (Editor Code Assistant), but bounced off it. I'm instead I'm going to try [[https://xenodium.com/][Xenodium]]'s [[https://github.com/xenodium/agent-shell][agent-shell]].
+
+Lets install the requirements first. Dependencies are listed on the [[https://github.com/xenodium/agent-shell?tab=readme-ov-file#doom-emacs][GitHub readme]].
 
 #+begin_src emacs-lisp :tangle "modules/tools/llm/packages.el" :noweb no-export :comments no
-(package! eca :recipe (:host github :repo "editor-code-assistant/eca-emacs" :files ("*.el")))
-#+end_src :
+(package! shell-maker)
+(package! acp)
+(package! agent-shell)
+#+end_src
 
+Next lets setup the packages with =use-package!=.
+
+#+begin_src emacs-lisp :tangle "modules/tools/llm/config.el" :noweb no-export :comments no
+(use-package! agent-shell
+  :config
+  (require 'acp)
+  (require 'agent-shell)
+  )
+#+end_src
+
+Since I'm currently using GitHub's CoPilot for my LLM needs, the copilot-cli will be needed as well. [[https://docs.github.com/en/copilot/concepts/agents/about-copilot-cli][See here for more]]. Install of this package will be left to the user.
 
 ** CoPilot Chat
 
