@@ -51,7 +51,6 @@ cask "todoist-app"
 cask "visual-studio-code"
 cask "whatsapp"
 cask "zoom"
-cask "fantastical"
 
 
 #emacs
