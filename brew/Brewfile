@@ -109,6 +109,8 @@ brew "openjdk@17"
 brew "rbenv"
 brew "ruby-build"
 cask "postgres-unofficial"
+brew "pmd"
+brew "overmind"
 ## Ops
 brew "ansible"
 brew "ansible-language-server"
